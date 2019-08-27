@@ -100,6 +100,7 @@ android {
         jni.srcDirs = []
         jniLibs.srcDir rootProject.file('libs')
     }
+
 }
 
 apply from: '../moduleFlavors.gradle'
@@ -108,5 +109,8 @@ repositories {
     flatDir {
         dirs rootProject.file('libs')
     }
+    jcenter();
+
 }
 //apply from: 'build.release.gradle'
+
