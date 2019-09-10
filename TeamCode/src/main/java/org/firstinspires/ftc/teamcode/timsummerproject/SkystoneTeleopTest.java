@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.View;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -18,6 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import java.util.Random;
 
 @TeleOp(name = "Teleop", group = "Tests")
+@Disabled
 
 public class SkystoneTeleopTest extends LinearOpMode {
 
@@ -220,10 +222,25 @@ public class SkystoneTeleopTest extends LinearOpMode {
                 motorFrontRight.setPower(driveTrain.right_pod);
 
             } else {
-                driveTrain.right_pod = -gamepad1.right_stick_y;
-                driveTrain.left_pod = -gamepad1.left_stick_y;
+                if (Math.abs(gamepad1.right_stick_y) > 0 || Math.abs(gamepad1.left_stick_y) > 0) {
+                    driveTrain.right_pod = -gamepad1.right_stick_y;
+                    driveTrain.left_pod = -gamepad1.left_stick_y;
+                }
+
+                motorFrontLeft.setPower(driveTrain.left_pod);
+                motorLeft.setPower(driveTrain.left_pod);
+                motorRight.setPower(driveTrain.right_pod);
+                motorFrontRight.setPower(driveTrain.right_pod);
+
             }
             telemetry.update();
+            if (gamepad1.atRest()) {
+                motorFrontLeft.setPower(0);
+                motorLeft.setPower(0);
+                motorRight.setPower(0);
+                motorFrontRight.setPower(0);
+
+            }
 
         }
 
@@ -256,10 +273,10 @@ public class SkystoneTeleopTest extends LinearOpMode {
         }
     }
     public void angleConversion(PodInfo drive, double angle, float forwardVelocity) {
-        if (angle > 90)
-            angle = 90;
-        if (angle < -90)
-            angle = -90;
+        if (angle > 135)
+            angle = 135;
+        if (angle < -135)
+            angle = -135;
         if (angle > 0) {
             drive.left_pod = -forwardVelocity;
             drive.right_pod = -forwardVelocity + forwardVelocity*angle/180;
@@ -277,34 +294,34 @@ public class SkystoneTeleopTest extends LinearOpMode {
 
     }
     public void turnTo(PodInfo driveTrain, float angle, float gyroAngle) {
-        float power = Math.abs(Math.abs(angle) - Math.abs(gyroAngle))/90;
-        if (power > 1)
-            power = 1;
+        //float power = Math.abs(Math.abs(angle) - Math.abs(gyroAngle))/90;
+        float power = 1;
         if (angle > 0) {
             if (gyroAngle > angle - 180 && gyroAngle <= angle) {
                 // Turn Right
-                driveTrain.left_pod = power;
-                driveTrain.right_pod = -power;
-            } else {
-                // Turn Left
                 driveTrain.left_pod = -power;
                 driveTrain.right_pod = power;
+            } else {
+                // Turn Left
+                driveTrain.left_pod = power;
+                driveTrain.right_pod = -power;
             }
         } else if (angle < 0) {
             if (gyroAngle < angle + 180 && gyroAngle >= angle) {
                 // Turn Left
-                driveTrain.left_pod = -power;
-                driveTrain.right_pod = power;
-            } else {
-                // Turn Right
                 driveTrain.left_pod = power;
                 driveTrain.right_pod = -power;
+            } else {
+                // Turn Right
+                driveTrain.left_pod = -power;
+                driveTrain.right_pod = power;
             }
         }
-        if (gyroAngle == angle) {
+      /*  if (gyroAngle == angle) {
             driveTrain.left_pod = 0;
             driveTrain.right_pod = 0;
         }
+        */
     }
 }
 
