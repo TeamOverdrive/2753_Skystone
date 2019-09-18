@@ -18,148 +18,123 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 import java.util.Random;
 
+@Disabled
+@TeleOp(name = "MecDrive", group = "TeleOp")
 public class MecanumDrive extends LinearOpMode {
 
-    private DcMotor motorLeft;
-    private DcMotor motorRight;
+    private DcMotor motorBackLeft;
+    private DcMotor motorBackRight;
     private DcMotor motorFrontLeft;
     private DcMotor motorFrontRight;
-    double leftStickAngle, rightStickAngle, frontRightPower = 0, frontLeftPower = 0,
-            backRightPower = 0, backLeftPower = 0;
+
+    private float redColor = 1, blueColor = 1, greenColor = 1;
+    private float RGB[] = {1,1,1};
+    private int colorRand = 0;
+
+    Random rand = new Random();
 
     @Override
+
     public void runOpMode() throws InterruptedException {
 
-        motorLeft = hardwareMap.dcMotor.get("left_back");
-        motorRight = hardwareMap.dcMotor.get("right_back");
+        motorBackLeft = hardwareMap.dcMotor.get("left_back");
+        motorBackRight = hardwareMap.dcMotor.get("right_back");
         motorFrontLeft = hardwareMap.dcMotor.get("left_front");
         motorFrontRight = hardwareMap.dcMotor.get("right_front");
 
-        motorRight.setDirection(DcMotor.Direction.REVERSE);
+        motorBackRight.setDirection(DcMotor.Direction.REVERSE);
         motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
+
+        double r;
+        double robotAngle;
+        double rightX;
+
+        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
 
         waitForStart();
 
         while(opModeIsActive()) {
 
-            leftStickAngle = relativeAngle(getQuadrant(gamepad1.left_stick_x,
-                    Math.abs(gamepad1.left_stick_y)), gamepad1.left_stick_x, gamepad1.left_stick_y);
+            if (gamepad1.left_stick_button && gamepad1.right_stick_button) {
+                if (redColor > 251 || blueColor > 251 || greenColor > 251) {
+                    colorRand = rand.nextInt(3) + 1;
+                    if (colorRand == 1) {
+                        redColor = 250;
+                        blueColor = rand.nextInt(100);
+                        greenColor = rand.nextInt(100);
+                    } else if (colorRand == 2) {
+                        blueColor = 250;
+                        redColor = rand.nextInt(100);
+                        greenColor = rand.nextInt(100);
+                    } else {
+                        greenColor = 250;
+                        blueColor = rand.nextInt(100);
+                        redColor = rand.nextInt(100);
+                    }
+                } else {
+                    if (colorRand == 1) {
 
-            rightStickAngle = relativeAngle(getQuadrant(gamepad1.right_stick_x,
-                    Math.abs(gamepad1.right_stick_y)), gamepad1.right_stick_x, gamepad1.right_stick_y);
+                        blueColor += 0.03;
+                        greenColor += 0.03;
+                    } else if (colorRand == 2) {
 
-            if (leftStickAngle == 0) {
+                        redColor += 0.03;
+                        greenColor += 0.03;
+                    } else {
 
-                frontLeftPower = 1;
-                backLeftPower = 1;
-                backRightPower = 1;
-                frontRightPower = 1;
-
-            } else if (leftStickAngle <= 90 && leftStickAngle > 0) {
-
-                frontLeftPower = 1;
-                backLeftPower = -1 + (90 - leftStickAngle)/45;
-                backRightPower = 1;
-                frontRightPower = -1 + (90 - leftStickAngle)/45;
-
-            } else if (leftStickAngle > 90 && leftStickAngle < 178) {
-
-                frontLeftPower = 1 - (180 - leftStickAngle)/45;
-                backLeftPower = -1;
-                backRightPower = 1  - (180 - leftStickAngle)/45;
-                frontRightPower = -1;
-
-            } else if (leftStickAngle >= -90 && leftStickAngle < 0) {
-
-                frontLeftPower = -1 + (90 - Math.abs(leftStickAngle))/45;
-                backLeftPower = 1;
-                backRightPower = -1 + (90 - Math.abs(leftStickAngle))/45;
-                frontRightPower = 1;
-
-            } else if (leftStickAngle < -90 && leftStickAngle > -178) {
-
-                frontLeftPower = -1;
-                backLeftPower = 1 - (180 - Math.abs(leftStickAngle))/45;
-                backRightPower = -1;
-                frontRightPower = 1 - (180 - Math.abs(leftStickAngle))/45;
-
-            } else {
-                frontLeftPower = -1;
-                backLeftPower = -1;
-                backRightPower = -1;
-                frontRightPower = -1;
-            }
-
-            if (rightStickAngle != 0) {
-                if (rightStickAngle > 0) {
-
-                    frontLeftPower = 1;
-                    backLeftPower = 1;
-                    backRightPower = -1;
-                    frontRightPower = -1;
-
-                } else if (rightStickAngle < 0) {
-
-                    frontLeftPower = -1;
-                    backLeftPower = -1;
-                    backRightPower = 1;
-                    frontRightPower = 1;
-
+                        blueColor += 0.03;
+                        redColor += 0.03;
+                    }
                 }
+
+                Color.RGBToHSV((int) (redColor),
+                        (int) (blueColor),
+                        (int) (greenColor),
+                        RGB);
+
+                relativeLayout.post(new Runnable() {
+                    public void run() {
+                        relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, RGB));
+                    }
+                });
             }
 
-            motorLeft.setPower(backLeftPower);
-            motorRight.setPower(backRightPower);
-            motorFrontLeft.setPower(frontLeftPower);
-            motorFrontRight.setPower(frontRightPower);
+            if (!gamepad1.right_stick_button && !gamepad1.left_stick_button) {
+                relativeLayout.post(new Runnable() {
+                    public void run() {
+                        relativeLayout.setBackgroundColor(Color.WHITE);
+                    }
+                });
+            }
 
+            r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
+            robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - (Math.PI / 4);
+            rightX = getStickAngle(gamepad1.right_stick_x, gamepad1.right_stick_y);
+            final double v1 = r * Math.cos(robotAngle) + rightX;
+            final double v2 = r * Math.sin(robotAngle) - rightX;
+            final double v3 = r * Math.sin(robotAngle) + rightX;
+            final double v4 = r * Math.cos(robotAngle) - rightX;
+
+            telemetry.addData("FL Power",v1);
+            telemetry.addData("FR Power",v2);
+            telemetry.addData("BL Power",v3);
+            telemetry.addData("BR Power",v4);
+            telemetry.update();
+
+
+            motorFrontLeft.setPower(v1);
+            motorFrontRight.setPower(v2);
+            motorBackLeft.setPower(v3);
+            motorBackRight.setPower(v4);
         }
 
     }
-
-    public int getQuadrant(float x, float y) {
-        if (x > 0 && y > 0) {
-            return 0;
-        } else if (x <= 0 && y > 0) {
-            return 1;
-        } else if (x <= 0 && y <= 0) {
-            return 2;
-        } else {
-            return 3;
-        }
-    }
-    public double relativeAngle(int quadrant, float x, float y) {
-        if (x == 0 && y <= 0) {
-            return 0;
-        } else if (x == 0 && y > 0) {
-            return 180;
-        } else if (quadrant == 0) {
-            return 90 + (Math.atan(Math.abs(y)/Math.abs(x)) * 57.2957795);
-        } else if (quadrant == 1) {
-            return -90 - (Math.atan(Math.abs(y)/Math.abs(x)) * 57.2957795);
-        } else if (quadrant == 2) {
-            return -90 + (Math.atan(Math.abs(y)/Math.abs(x)) * 57.2957795);
-        } else {
-            return 90 - (Math.atan(Math.abs(y)/Math.abs(x)) * 57.2957795);
-        }
-    }
-    public void angleConversion(PodInfo drive, double angle, float forwardVelocity) {
-        if (angle > 135)
-            angle = 135;
-        if (angle < -135)
-            angle = -135;
-        if (angle > 0) {
-            drive.left_pod = -forwardVelocity;
-            drive.right_pod = -forwardVelocity + forwardVelocity*angle/180;
-        }
-        if (angle < 0) {
-            drive.right_pod = -forwardVelocity;
-            drive.left_pod = -forwardVelocity - forwardVelocity*angle/180;
-        }
-        if (angle == 0) {
-            drive.right_pod = -forwardVelocity;
-            drive.left_pod = -forwardVelocity;
-        }
+    private double getStickAngle(float x, float y) {
+       double returnValue =  (Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 2) * 2;
+       if (returnValue > 1)
+           returnValue = 1;
+       return returnValue;
     }
 }
 
