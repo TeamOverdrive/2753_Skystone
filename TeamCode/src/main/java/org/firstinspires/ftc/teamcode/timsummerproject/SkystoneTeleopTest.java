@@ -27,7 +27,7 @@ public class SkystoneTeleopTest extends LinearOpMode {
 
     PodInfo driveTrain = new PodInfo();
 
-    private float redColor = 1, blueColor = 1, greenColor = 1, left_pod = 0, right_pod = 0;
+    private float redColor = 1, blueColor = 1, greenColor = 1;
     private float RGB[] = {1,1,1};
     private int colorRand = 0;
 
