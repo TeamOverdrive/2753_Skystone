@@ -41,7 +41,11 @@ public class MecanumDrive2 extends LinearOpMode {
 
     boolean xButtonNotDown = false;
     boolean yButtonNotDown = false;
+    boolean aButtonNotDown = false;
+    boolean bButtonNotDown = false;
     boolean frontEnd = true;
+    boolean doMaxSpeed = true;
+    boolean doAddDisplay = false;
 
     int opMode = 0;
     private int colorRand = 0;
@@ -155,7 +159,7 @@ public class MecanumDrive2 extends LinearOpMode {
             if (opMode == 0)
                 travel(Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4,
                         Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y),
-                        Math.atan2(gamepad1.right_stick_y,gamepad1.right_stick_x) * 2);
+                        Math.atan2(gamepad1.right_stick_y,gamepad1.right_stick_x) * 2, doMaxSpeed);
             else if (opMode == 1) {
                 relativeAngle = (Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4) - angles.firstAngle;
                 if (Math.abs(relativeAngle) > 180) {
@@ -165,7 +169,7 @@ public class MecanumDrive2 extends LinearOpMode {
                         relativeAngle = 360 - Math.abs(relativeAngle);
 
                     travel(relativeAngle, Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y),
-                            Math.atan2(gamepad1.right_stick_y,gamepad1.right_stick_x) * 2);
+                            Math.atan2(gamepad1.right_stick_y,gamepad1.right_stick_x) * 2, doMaxSpeed);
                 }
             }
             if (gamepad1.x && !xButtonNotDown) {
@@ -177,6 +181,20 @@ public class MecanumDrive2 extends LinearOpMode {
             }
             if (!gamepad1.x)
                 xButtonNotDown = false;
+
+            if (gamepad1.a && !aButtonNotDown) {
+                aButtonNotDown = true;
+                doMaxSpeed = !doMaxSpeed;
+            }
+            if (!gamepad1.a)
+                aButtonNotDown = false;
+
+            if (gamepad1.b && !bButtonNotDown) {
+                bButtonNotDown = true;
+                doAddDisplay = !doAddDisplay;
+            }
+            if (!gamepad1.b)
+                bButtonNotDown = false;
 
             if (gamepad1.y && !yButtonNotDown) {
                 yButtonNotDown = true;
@@ -211,12 +229,27 @@ public class MecanumDrive2 extends LinearOpMode {
                     motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
                     motorBackRight.setDirection(DcMotor.Direction.REVERSE);
                 */
+            if (opMode == 1)
+                telemetry.addData("(x) Field Centric Active: ", true);
+            else
+                telemetry.addData("(x) Field Centric Active: ", false);
 
+            telemetry.addData("(y) Robot Reversed: ", !frontEnd);
+            telemetry.addData("(a) Speed Maximisation Active: ", doMaxSpeed);
+            telemetry.addData("(b) Display Active: ", doAddDisplay);
+            if (doAddDisplay) {
+                telemetry.addData("Front Left Power", motorFrontLeft.getPower());
+                telemetry.addData("Front Right Power", motorFrontRight.getPower());
+                telemetry.addData("Back Left Motor Power", motorBackLeft.getPower());
+                telemetry.addData("Back Right Motor Power", motorBackRight.getPower());
+            }
+
+            telemetry.update();
         }
 
     }
 
-    public void travel(double angle, double r, double tanRight) {
+    public void travel(double angle, double r, double tanRight, boolean speedMaxActive) {
 
         if (r > 1)
             r = 1;
@@ -226,6 +259,29 @@ public class MecanumDrive2 extends LinearOpMode {
         double v2 = r * Math.sin(angle) - rightX;
         double v3 = r * Math.sin(angle) + rightX;
         double v4 = r * Math.cos(angle) - rightX;
+        if (speedMaxActive) {
+            if (v1 >= v2 && v1 >= v3 && v1 >= v4 && v1 < 1) {
+                v1 = 1;
+                v2 = (1 / v1) * v2;
+                v3 = (1 / v1) * v3;
+                v4 = (1 / v1) * v4;
+            } else if (v2 >= v1 && v2 >= v3 && v2 >= v4 && v2 < 1) {
+                v1 = (1 / v2) * v1;
+                v2 = 1;
+                v3 = (1 / v2) * v3;
+                v4 = (1 / v2) * v4;
+            } else if (v3 >= v1 && v3 >= v2 && v3 >= v4 && v3 < 1) {
+                v1 = (1 / v3) * v1;
+                v2 = (1 / v3) * v2;
+                v3 = 1;
+                v4 = (1 / v3) * v4;
+            } else if (v4 >= v1 && v4 >= v2 && v4 >= v3 && v4 < 1) {
+                v1 = (1 / v4) * v1;
+                v2 = (1 / v4) * v2;
+                v3 = (1 / v4) * v3;
+                v4 = 1;
+            }
+        }
 
         motorFrontLeft.setPower(v1);
         motorFrontRight.setPower(v2);
