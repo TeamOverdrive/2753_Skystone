@@ -161,7 +161,13 @@ public class MecanumDrive2 extends LinearOpMode {
                         Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y),
                         Math.atan2(gamepad1.right_stick_y,gamepad1.right_stick_x) * 2, doMaxSpeed);
             else if (opMode == 1) {
-                relativeAngle = (Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4) - angles.firstAngle;
+                if (frontEnd)
+                    relativeAngle = (Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4) - angles.firstAngle;
+                if (!frontEnd) {
+                    relativeAngle = (Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4) - (180 - angles.firstAngle);
+                    if (relativeAngle < -180)
+                        relativeAngle = 360 + relativeAngle;
+                }
                 if (Math.abs(relativeAngle) > 180) {
                     if (relativeAngle > 0)
                         relativeAngle = -(360 - Math.abs(relativeAngle));
@@ -238,10 +244,13 @@ public class MecanumDrive2 extends LinearOpMode {
             telemetry.addData("(a) Speed Maximisation Active: ", doMaxSpeed);
             telemetry.addData("(b) Display Active: ", doAddDisplay);
             if (doAddDisplay) {
-                telemetry.addData("Front Left Power", motorFrontLeft.getPower());
-                telemetry.addData("Front Right Power", motorFrontRight.getPower());
+                telemetry.addData("Front Left Motor Power", motorFrontLeft.getPower());
+                telemetry.addData("Front Right Motor Power", motorFrontRight.getPower());
                 telemetry.addData("Back Left Motor Power", motorBackLeft.getPower());
                 telemetry.addData("Back Right Motor Power", motorBackRight.getPower());
+                telemetry.addData("Robot Angle (Yaw): ", angles.firstAngle);
+                telemetry.addData("Relative Angle: ", relativeAngle);
+
             }
 
             telemetry.update();
@@ -259,27 +268,28 @@ public class MecanumDrive2 extends LinearOpMode {
         double v2 = r * Math.sin(angle) - rightX;
         double v3 = r * Math.sin(angle) + rightX;
         double v4 = r * Math.cos(angle) - rightX;
+        
         if (speedMaxActive) {
-            if (v1 >= v2 && v1 >= v3 && v1 >= v4 && v1 < 1) {
-                v1 = 1;
-                v2 = (1 / v1) * v2;
-                v3 = (1 / v1) * v3;
-                v4 = (1 / v1) * v4;
-            } else if (v2 >= v1 && v2 >= v3 && v2 >= v4 && v2 < 1) {
-                v1 = (1 / v2) * v1;
-                v2 = 1;
-                v3 = (1 / v2) * v3;
-                v4 = (1 / v2) * v4;
-            } else if (v3 >= v1 && v3 >= v2 && v3 >= v4 && v3 < 1) {
-                v1 = (1 / v3) * v1;
-                v2 = (1 / v3) * v2;
-                v3 = 1;
-                v4 = (1 / v3) * v4;
-            } else if (v4 >= v1 && v4 >= v2 && v4 >= v3 && v4 < 1) {
-                v1 = (1 / v4) * v1;
-                v2 = (1 / v4) * v2;
-                v3 = (1 / v4) * v3;
-                v4 = 1;
+            if (Math.abs(v1) >= Math.abs(v2) && Math.abs(v1) >= Math.abs(v3) && Math.abs(v1) >= Math.abs(v4) && Math.abs(v1) < 1) {
+                v1 = (1 / Math.abs(v1)) * v1;
+                v2 = (1 / Math.abs(v1)) * v2;
+                v3 = (1 / Math.abs(v1)) * v3;
+                v4 = (1 / Math.abs(v1)) * v4;
+            } else if (Math.abs(v2) >= Math.abs(v1) && Math.abs(v2) >= Math.abs(v3) && Math.abs(v2) >= Math.abs(v4) && Math.abs(v2) < 1) {
+                v1 = (1 / Math.abs(v2)) * v1;
+                v2 = (1 / Math.abs(v2)) * v2;
+                v3 = (1 / Math.abs(v2)) * v3;
+                v4 = (1 / Math.abs(v2)) * v4;
+            } else if (Math.abs(v3) >= Math.abs(v1) && Math.abs(v3) >= Math.abs(v2) && Math.abs(v3) >= Math.abs(v4) && Math.abs(v3) < 1) {
+                v1 = (1 / Math.abs(v3)) * v1;
+                v2 = (1 / Math.abs(v3)) * v2;
+                v3 = (1 / Math.abs(v3)) * v3;
+                v4 = (1 / Math.abs(v3)) * v4;
+            }  else if (Math.abs(v4) >= Math.abs(v1) && Math.abs(v4) >= Math.abs(v2) && Math.abs(v4) >= Math.abs(v3) && Math.abs(v4) < 1) {
+                v1 = (1 / Math.abs(v4)) * v1;
+                v2 = (1 / Math.abs(v4)) * v2;
+                v3 = (1 / Math.abs(v4)) * v3;
+                v4 = (1 / Math.abs(v4)) * v4;
             }
         }
 
