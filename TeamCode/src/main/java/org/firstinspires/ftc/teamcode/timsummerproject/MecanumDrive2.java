@@ -43,7 +43,6 @@ public class MecanumDrive2 extends LinearOpMode {
     boolean yButtonNotDown = false;
     boolean aButtonNotDown = false;
     boolean bButtonNotDown = false;
-    boolean frontEnd = true;
     boolean doMaxSpeed = true;
     boolean doAddDisplay = false;
 
@@ -67,8 +66,8 @@ public class MecanumDrive2 extends LinearOpMode {
         motorFrontLeft = hardwareMap.dcMotor.get("left_front");
         motorFrontRight = hardwareMap.dcMotor.get("right_front");
 
-        motorBackLeft.setDirection(DcMotor.Direction.REVERSE);
-        motorFrontLeft.setDirection(DcMotor.Direction.REVERSE);
+        motorBackRight.setDirection(DcMotor.Direction.REVERSE);
+        motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
@@ -162,13 +161,7 @@ public class MecanumDrive2 extends LinearOpMode {
                         gamepad1.right_stick_x, doMaxSpeed);
             // Math.atan2(gamepad1.right_stick_y,gamepad1.right_stick_x) * 2
             else if (opMode == 1) {
-                if (frontEnd)
                     relativeAngle = (Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4) - angles.firstAngle;
-                if (!frontEnd) {
-                    relativeAngle = (Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4) - (180 - angles.firstAngle);
-                    if (relativeAngle < -180)
-                        relativeAngle = 360 + relativeAngle;
-                }
                 if (Math.abs(relativeAngle) > 180) {
                     if (relativeAngle > 0)
                         relativeAngle = -(360 - Math.abs(relativeAngle));
@@ -203,32 +196,6 @@ public class MecanumDrive2 extends LinearOpMode {
             if (!gamepad1.b)
                 bButtonNotDown = false;
 
-            if (gamepad1.y && !yButtonNotDown) {
-                yButtonNotDown = true;
-
-                if (!frontEnd) {
-
-                    motorBackLeft = hardwareMap.dcMotor.get("left_back");
-                    motorBackRight = hardwareMap.dcMotor.get("right_back");
-                    motorFrontLeft = hardwareMap.dcMotor.get("left_front");
-                    motorFrontRight = hardwareMap.dcMotor.get("right_front");
-                    frontEnd = true;
-
-                }
-
-                if (frontEnd) {
-
-                    motorBackLeft = hardwareMap.dcMotor.get("right_front");
-                    motorBackRight = hardwareMap.dcMotor.get("left_front");
-                    motorFrontLeft = hardwareMap.dcMotor.get("right_back");
-                    motorFrontRight = hardwareMap.dcMotor.get("left_back");
-                    frontEnd = false;
-
-                }
-            }
-            if (!gamepad1.y)
-                yButtonNotDown = false;
-
 
                 /*
                     motorBackLeft.setDirection(DcMotor.Direction.FORWARD);
@@ -241,7 +208,6 @@ public class MecanumDrive2 extends LinearOpMode {
             else
                 telemetry.addData("(x) Field Centric Active: ", false);
 
-            telemetry.addData("(y) Robot Reversed: ", !frontEnd);
             telemetry.addData("(a) Speed Maximisation Active: ", doMaxSpeed);
             telemetry.addData("(b) Display Active: ", doAddDisplay);
             if (doAddDisplay) {
