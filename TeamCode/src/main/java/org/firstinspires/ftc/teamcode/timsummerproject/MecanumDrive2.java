@@ -159,7 +159,8 @@ public class MecanumDrive2 extends LinearOpMode {
             if (opMode == 0)
                 travel(Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4,
                         Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y),
-                        Math.atan2(gamepad1.right_stick_y,gamepad1.right_stick_x) * 2, doMaxSpeed);
+                        gamepad1.right_stick_x, doMaxSpeed);
+            // Math.atan2(gamepad1.right_stick_y,gamepad1.right_stick_x) * 2
             else if (opMode == 1) {
                 if (frontEnd)
                     relativeAngle = (Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4) - angles.firstAngle;
@@ -262,13 +263,23 @@ public class MecanumDrive2 extends LinearOpMode {
 
         if (r > 1)
             r = 1;
+
         double rightX = tanRight;
 
         double v1 = r * Math.cos(angle) + rightX;
         double v2 = r * Math.sin(angle) - rightX;
         double v3 = r * Math.sin(angle) + rightX;
         double v4 = r * Math.cos(angle) - rightX;
-        
+
+        if (speedMaxActive) {
+             v1 = r * Math.cos(angle) * (2 / Math.sqrt(2)) + rightX;
+             v2 = r * Math.sin(angle) * (2 / Math.sqrt(2)) - rightX;
+             v3 = r * Math.sin(angle) * (2 / Math.sqrt(2)) + rightX;
+             v4 = r * Math.cos(angle) * (2 / Math.sqrt(2)) - rightX;
+        }
+
+        /*
+
         if (speedMaxActive) {
             if (Math.abs(v1) >= Math.abs(v2) && Math.abs(v1) >= Math.abs(v3) && Math.abs(v1) >= Math.abs(v4) && Math.abs(v1) < 1) {
                 v1 = (1 / Math.abs(v1)) * v1;
@@ -292,6 +303,8 @@ public class MecanumDrive2 extends LinearOpMode {
                 v4 = (1 / Math.abs(v4)) * v4;
             }
         }
+        */
+
 
         motorFrontLeft.setPower(v1);
         motorFrontRight.setPower(v2);
