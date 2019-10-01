@@ -24,9 +24,9 @@ dependencies {
     extremeTurboImplementation project(':RobotCore')
     extremeTurboImplementation project(':FtcCommon')
 
-    stockImplementation 'org.openftc:hardware-stock:5.1'
-    stockImplementation 'org.openftc:robotcore-stock:5.1'
-    stockImplementation 'org.openftc:ftccommon-stock:5.1'
+    stockImplementation 'org.openftc:hardware-stock:5.2'
+    stockImplementation 'org.openftc:robotcore-stock:5.2'
+    stockImplementation 'org.openftc:ftccommon-stock:5.2'
 
     // REV extentions 2
     implementation 'org.openftc:rev-extensions-2:1.2'
