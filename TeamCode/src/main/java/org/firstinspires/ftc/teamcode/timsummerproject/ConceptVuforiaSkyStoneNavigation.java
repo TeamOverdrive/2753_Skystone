@@ -372,17 +372,21 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
                 telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                         translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
-                double xPosition = translation.get(0);
+                double yPosition = translation.get(1);
 
-                if(xPosition < -10) {
+                if (yPosition >3 ) {
+                    positionSkystone = "right";
+                }
+                else if (yPosition <-3 ) {
                     positionSkystone = "left";
-                }else {
+                }
+                else if (yPosition >-3 && yPosition <3) {
                     positionSkystone = "center";
                 }
 
 
 
-                double yPosition = translation.get(1);
+                double xPosition = translation.get(0);
                 double zPosition = translation.get(2);
 
 
@@ -391,11 +395,12 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
                 telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
             }
             else {
-                positionSkystone = "right";
+                positionSkystone = "not visible";
                 telemetry.addData("Visible Target", "none");
             }
             telemetry.addData("Skystone Position", positionSkystone);
             telemetry.update();
+            telemetry.addLine("Updated");
         }
 
         // Disable Tracking when we are done;
