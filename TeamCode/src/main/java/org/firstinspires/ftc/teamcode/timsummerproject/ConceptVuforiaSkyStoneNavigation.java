@@ -92,7 +92,7 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
     //
     // NOTE: If you are running on a CONTROL HUB, with only one USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     //
-    private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
+    private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
     private static final boolean PHONE_IS_PORTRAIT = false  ;
 
     /*
@@ -108,10 +108,7 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
      * and paste it in to your code on the next line, between the double quotes.
      */
     private static final String VUFORIA_KEY =
-            " AeUsQDb/////AAAAGXsDAQwNS0SWopXJpAHyRntcnTcoWD8TnsR6PWGX9OwmlIhNxQgn8RX/1cH2RXXTsuS" +
-                    "kHh6OjfMoCuHt35rhumaUsLnk8MZZJ7P9PEu+uSsUbH1hHcnnB6GzJnX/FqlZJX5HWWfeQva5s4OHJ" +
-                    "EwSbPR2zxhkRxntAjeuIPGVSHeIseAikPB0NF0SqEiPZea+PWrxpryP0BYc3tnsaaDJww59RNJ6IK9" +
-                    "D3PZM+oPDrmF9ukQrc/jw+u+6Zm4wQHieHt9urSwLR7dgz0V3aatDx1V7y ";
+            "AeUsQDb/////AAAAGXsDAQwNS0SWopXJpAHyRntcnTcoWD8TnsR6PWGX9OwmlIhNxQgn8RX/1cH2RXXTsuSkHh6OjfMoCuHt35rhumaUsLnk8MZZJ7P9PEu+uSsUbH1hHcnnB6GzJnX/FqlZJX5HWWfeQva5s4OHJEwSbPR2zxhkRxntAjeuIPGVSHeIseAikPB0NF0SqEiPZea+PWrxpryP/bxKqy7VA77krKFtgDi6amam+vWvBCqyIo6tXxbo0w8q/HCXo4v/4UYyoFLRx1l1d2Wya5an5SwFfU3eKxy0BYc3tnsaaDJww59RNJ6IK9D3PZM+oPDrmF9ukQrc/jw+u+6Zm4wQHieHt9urSwLR7dgz0V3aatDx1V7y";
 
     // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
     // We will define some constants and conversions here
@@ -328,6 +325,34 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
+
+                    if(trackable.getName().equalsIgnoreCase("Stone Target")) {
+                        telemetry.addLine("Stone Target Is Visible");
+                    }
+                    if(trackable.getName().equals("Blue Perimeter " + 1)) {
+                        telemetry.addLine("Blue Perimeter 1 Is Visible");
+                    }
+                    if(trackable.getName().equals("Blue Perimeter " + 2)) {
+                        telemetry.addLine("Blue Perimeter 2 Is Visible");
+                    }
+                    if(trackable.getName().equals("Rear Perimeter 1")) {
+                        telemetry.addLine("Rear Perimeter 1 Is Visible");
+                    }
+                    if(trackable.getName().equals("Rear Perimeter 2")) {
+                        telemetry.addLine("Rear Perimeter 2 Is Visible");
+                    }
+                    if(trackable.getName().equals("Red Perimeter 1")) {
+                        telemetry.addLine("Red Perimeter 1 Is Visible");
+                    }
+                    if(trackable.getName().equals("Red Perimeter 2")) {
+                        telemetry.addLine("Red Perimeter 2 Is Visible");
+                    }
+                    if(trackable.getName().equals("Front Perimeter 1")) {
+                        telemetry.addLine("Front Perimeter 1 Is Visible");
+                    }
+                    if(trackable.getName().equals("Front Perimeter 2")) {
+                        telemetry.addLine("Front Perimeter 2 Is Visible");
+                    }
                     targetVisible = true;
 
                     // getUpdatedRobotLocation() will return null if no new information is available since
