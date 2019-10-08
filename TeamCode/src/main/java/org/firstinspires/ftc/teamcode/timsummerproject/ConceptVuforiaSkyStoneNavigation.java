@@ -326,7 +326,7 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
                 if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
 
-                    if(trackable.getName().equalsIgnoreCase("Stone Target")) {
+                    if(trackable.getName().equals("Stone Target")) {
                         telemetry.addLine("Stone Target Is Visible");
                     }
                     if(trackable.getName().equals("Blue Perimeter " + 1)) {
@@ -364,7 +364,7 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
                     break;
                 }
             }
-
+            String positionSkystone = "";
             // Provide feedback as to where the robot is located (if we know).
             if (targetVisible) {
                 // express position (translation) of robot in inches.
@@ -372,13 +372,29 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
                 telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                         translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
+                double xPosition = translation.get(0);
+
+                if(xPosition < -10) {
+                    positionSkystone = "left";
+                }else {
+                    positionSkystone = "center";
+                }
+
+
+
+                double yPosition = translation.get(1);
+                double zPosition = translation.get(2);
+
+
                 // express the rotation of the robot in degrees.
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
                 telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
             }
             else {
+                positionSkystone = "right";
                 telemetry.addData("Visible Target", "none");
             }
+            telemetry.addData("Skystone Position", positionSkystone);
             telemetry.update();
         }
 
