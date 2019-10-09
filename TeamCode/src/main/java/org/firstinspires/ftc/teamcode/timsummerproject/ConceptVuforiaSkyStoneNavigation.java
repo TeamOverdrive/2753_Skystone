@@ -325,6 +325,7 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
+                    telemetry.addData("Target Name Length", trackable.getName().length());
 
                     if(trackable.getName().equalsIgnoreCase("Stone Target")) {
                         telemetry.addLine("Stone Target Is Visible");
@@ -353,6 +354,7 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
                     if(trackable.getName().equals("Front Perimeter 2")) {
                         telemetry.addLine("Front Perimeter 2 Is Visible");
                     }
+                    telemetry.update();
                     targetVisible = true;
 
                     // getUpdatedRobotLocation() will return null if no new information is available since
