@@ -58,5 +58,5 @@ dependencies {
      * External
      */
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.acmerobotics.roadrunner:core:0.4.5'
+    //implementation 'com.acmerobotics.roadrunner:core:0.4.5'
 }
