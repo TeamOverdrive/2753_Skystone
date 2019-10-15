@@ -11,11 +11,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@TeleOp(name = "MecDrive2.0", group = "TeleOp")
+@TeleOp(name = "Teleop", group = "TeleOp")
 public class MecanumDrive2 extends LinearOpMode {
 
     boolean xButtonNotDown = false, aButtonNotDown = false, bButtonNotDown = false;
-    boolean doMaxSpeed = false,doAddDisplay = false;
+    boolean doMaxSpeed = true,doAddDisplay = false;
 
     double relativeAngle, turnToAngle;
 
@@ -66,7 +66,7 @@ public class MecanumDrive2 extends LinearOpMode {
                         Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y),
                         gamepad1.right_stick_x, doMaxSpeed);
             else if (opMode == 2 && gamepad1.left_trigger > 0 || gamepad1.right_trigger > 0) {
-                relativeAngle = (Math.atan2(-gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4) - Math.toRadians(angles.firstAngle);
+                relativeAngle = (Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4) - Math.toRadians(angles.firstAngle);
                 if (Math.abs(relativeAngle) > Math.PI) {
                     if (relativeAngle > 0)
                         relativeAngle = -(Math.PI * 2 - Math.abs(relativeAngle));
@@ -101,11 +101,13 @@ public class MecanumDrive2 extends LinearOpMode {
                 xButtonNotDown = false;
             */
 
+            /*
             if (gamepad1.a && !aButtonNotDown) {
                 aButtonNotDown = true;
                 doMaxSpeed = !doMaxSpeed;
             } else if (!gamepad1.a)
                 aButtonNotDown = false;
+            */
 
             if (gamepad1.b && !bButtonNotDown) {
                 bButtonNotDown = true;
