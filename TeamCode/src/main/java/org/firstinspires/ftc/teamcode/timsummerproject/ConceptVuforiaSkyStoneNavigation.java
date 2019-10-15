@@ -376,20 +376,31 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
 
                 double yPosition = translation.get(1);
 
-                if (yPosition >3 ) {
+                if (yPosition >30 ) {
                     positionSkystone = "right";
                 }
-                else if (yPosition <-3 ) {
+                else if (yPosition <-30 ) {
                     positionSkystone = "left";
                 }
-                else if (yPosition >-3 && yPosition <3) {
+                else if (yPosition >-30 && yPosition <30) {
                     positionSkystone = "center";
                 }
 
 
 
                 double xPosition = translation.get(0);
+
+                if (xPosition >30) {
+                    positionSkystone = "far";
+
+                }
+                else {
+                    positionSkystone = "near";
+                }
+
+
                 double zPosition = translation.get(2);
+                
 
 
                 // express the rotation of the robot in degrees.
@@ -402,7 +413,6 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
             }
             telemetry.addData("Skystone Position", positionSkystone);
             telemetry.update();
-            telemetry.addLine("Updated");
         }
 
         // Disable Tracking when we are done;
