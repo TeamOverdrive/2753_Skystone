@@ -1,40 +1,54 @@
 package org.firstinspires.ftc.teamcode.timsummerproject;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@Autonomous(name="Auto Move", group="Pushbot")
-public class AutoPathing extends LinearOpMode {
+
+@TeleOp(name = "Teleop", group = "TeleOp")
+public class Teleop extends LinearOpMode {
+
+    private DcMotor motorBackLeft;
+    private DcMotor motorBackRight;
+    private DcMotor motorFrontLeft;
+    private DcMotor motorFrontRight;
 
     DriveTrain drive = new DriveTrain();
 
-    DcMotor motorBackLeft;
-    DcMotor motorBackRight;
-    DcMotor motorFrontLeft;
-    DcMotor motorFrontRight;
+    @Override
+    public void runOpMode() throws InterruptedException {
 
+        BNO055IMU imu;
+        Orientation angles;
 
-    public void runOpMode() {
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
+        parameters.loggingEnabled      = true;
+        parameters.loggingTag          = "IMU";
 
-        motorBackLeft = hardwareMap.dcMotor.get("left_back");
-        motorBackRight = hardwareMap.dcMotor.get("right_back");
-        motorFrontLeft = hardwareMap.dcMotor.get("left_front");
-        motorFrontRight = hardwareMap.dcMotor.get("right_front");
-
-        motorBackRight.setDirection(DcMotor.Direction.REVERSE);
-        motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
-
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
 
         waitForStart();
 
+        while(opModeIsActive()) {
+
+            initMotors();
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            teleDrive(angles);
+            update();
+
+
+        }
 
     }
     public void initMotors() {
@@ -94,3 +108,6 @@ public class AutoPathing extends LinearOpMode {
     }
 
 }
+
+
+

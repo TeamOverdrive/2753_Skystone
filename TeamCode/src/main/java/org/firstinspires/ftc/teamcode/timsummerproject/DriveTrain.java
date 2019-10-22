@@ -1,35 +1,58 @@
 package org.firstinspires.ftc.teamcode.timsummerproject;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+
 public class DriveTrain {
-    double v1 = 0;
-    double v2 = 0;
-    double v3 = 0;
-    double v4 = 0;
+
+    double FrontLeft = 0;
+    double FrontRight = 0;
+    double BackLeft = 0;
+    double BackRight = 0;
+
 
     public DriveTrain() {
 
     }
 
-
-    public void travel(double angle, double r, double tanRight, boolean speedMaxActive) {
+    public void move(double angle, double r, double tanRight) {
 
         if (r > 1)
             r = 1;
 
-        double rightX = tanRight;
+        this.FrontLeft = r * Math.cos(angle) * (2 / Math.sqrt(2)) + tanRight;
+        this.FrontRight = r * Math.sin(angle) * (2 / Math.sqrt(2)) - tanRight;
+        this.BackLeft = r * Math.sin(angle) * (2 / Math.sqrt(2)) + tanRight;
+        this.BackRight = r * Math.cos(angle) * (2 / Math.sqrt(2)) - tanRight;
 
-         this.v1 = r * Math.cos(angle) + rightX;
-         this.v2 = r * Math.sin(angle) - rightX;
-         this.v3 = r * Math.sin(angle) + rightX;
-         this.v4 = r * Math.cos(angle) - rightX;
+    }
 
-        if (speedMaxActive) {
-            this.v1 = r * Math.cos(angle) * (2 / Math.sqrt(2)) + rightX;
-            this.v2 = r * Math.sin(angle) * (2 / Math.sqrt(2)) - rightX;
-            this.v3 = r * Math.sin(angle) * (2 / Math.sqrt(2)) + rightX;
-            this.v4 = r * Math.cos(angle) * (2 / Math.sqrt(2)) - rightX;
+    public void move(String leftRight,float speed) {
+
+        if (leftRight.equalsIgnoreCase("RIGHT")) {
+            this.FrontLeft = Math.abs(speed);
+            this.FrontRight = -Math.abs(speed);
+            this.BackLeft = -Math.abs(speed);
+            this.BackRight = Math.abs(speed);
+        }
+
+        if (leftRight.equalsIgnoreCase("LEFT")) {
+            this.FrontLeft = -Math.abs(speed);
+            this.FrontRight = Math.abs(speed);
+            this.BackLeft = Math.abs(speed);
+            this.BackRight = -Math.abs(speed);
         }
     }
+
+    public void move(float speed) {
+
+        this.FrontLeft = speed;
+        this.FrontRight = speed;
+        this.BackLeft = speed;
+        this.BackRight = speed;
+
+    }
+
 }
