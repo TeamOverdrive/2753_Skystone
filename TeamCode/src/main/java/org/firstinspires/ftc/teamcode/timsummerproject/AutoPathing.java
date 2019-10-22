@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.timsummerproject;
 
+<<<<<<< HEAD
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -93,4 +94,7 @@ public class AutoPathing extends LinearOpMode {
 
     }
 
+=======
+public class AutoPathing {
+>>>>>>> master
 }
