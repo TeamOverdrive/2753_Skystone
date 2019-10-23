@@ -376,7 +376,6 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
 
                 double yPosition = translation.get(1);
 
-<<<<<<< HEAD
                 if (yPosition > 70 ) {
                     positionSkystone = "right";
                 }
@@ -384,7 +383,8 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
                     positionSkystone = "left";
                 }
                 else if (yPosition > -70 && yPosition < 70) {
-=======
+
+                }
                 if (yPosition >30 ) {
                     positionSkystone = "right";
                 }
@@ -392,7 +392,6 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
                     positionSkystone = "left";
                 }
                 else if (yPosition >-30 && yPosition <30) {
->>>>>>> master
                     positionSkystone = "center";
                 }
 

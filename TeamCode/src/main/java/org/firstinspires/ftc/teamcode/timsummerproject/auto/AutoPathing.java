@@ -1,16 +1,11 @@
-package org.firstinspires.ftc.teamcode.timsummerproject;
+package org.firstinspires.ftc.teamcode.timsummerproject.auto;
 
-<<<<<<< HEAD
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.timsummerproject.subsystems.DriveTrain;
 
 @Autonomous(name="Auto Move", group="Pushbot")
 public class AutoPathing extends LinearOpMode {
@@ -38,6 +33,7 @@ public class AutoPathing extends LinearOpMode {
 
 
     }
+
     public void initMotors() {
 
         motorBackLeft = hardwareMap.get(DcMotor.class, "left_back");
@@ -49,6 +45,7 @@ public class AutoPathing extends LinearOpMode {
         motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
 
     }
+
     public void teleDrive(Orientation angles) {
         double relativeAngle;
         relativeAngle = (Math.atan2(-gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4) - Math.toRadians(angles.firstAngle);
@@ -59,7 +56,7 @@ public class AutoPathing extends LinearOpMode {
                 relativeAngle = Math.PI * 2 - Math.abs(relativeAngle);
         }
 
-        drive.move(relativeAngle, Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y),
+        drive.move(relativeAngle, Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x + gamepad1.left_stick_y * gamepad1.left_stick_y),
                 gamepad1.right_stick_x);
     }
 
@@ -70,6 +67,7 @@ public class AutoPathing extends LinearOpMode {
         motorBackRight.setPower(drive.BackRight);
 
     }
+
     public void setBrake() {
 
         motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -77,6 +75,7 @@ public class AutoPathing extends LinearOpMode {
         motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
+
     public void removeBrake() {
 
         motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -85,6 +84,7 @@ public class AutoPathing extends LinearOpMode {
         motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
     }
+
     public void stopMove() {
 
         motorFrontLeft.setPower(0);
@@ -94,7 +94,4 @@ public class AutoPathing extends LinearOpMode {
 
     }
 
-=======
-public class AutoPathing {
->>>>>>> master
 }

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.timsummerproject;
+package org.firstinspires.ftc.teamcode.timsummerproject.subsystems;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,10 +7,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class DriveTrain {
 
-    double FrontLeft = 0;
-    double FrontRight = 0;
-    double BackLeft = 0;
-    double BackRight = 0;
+    public double FrontLeft = 0;
+    public double FrontRight = 0;
+    public double BackLeft = 0;
+    public double BackRight = 0;
 
 
     public DriveTrain() {
