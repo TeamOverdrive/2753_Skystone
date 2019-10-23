@@ -32,6 +32,8 @@ public class AutoPathing extends LinearOpMode {
         waitForStart();
 
 
+
+
     }
 
     public void initMotors() {
@@ -44,20 +46,6 @@ public class AutoPathing extends LinearOpMode {
         motorBackRight.setDirection(DcMotor.Direction.REVERSE);
         motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
 
-    }
-
-    public void teleDrive(Orientation angles) {
-        double relativeAngle;
-        relativeAngle = (Math.atan2(-gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4) - Math.toRadians(angles.firstAngle);
-        if (Math.abs(relativeAngle) > Math.PI) {
-            if (relativeAngle > 0)
-                relativeAngle = -(Math.PI * 2 - Math.abs(relativeAngle));
-            else if (relativeAngle > 0)
-                relativeAngle = Math.PI * 2 - Math.abs(relativeAngle);
-        }
-
-        drive.move(relativeAngle, Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x + gamepad1.left_stick_y * gamepad1.left_stick_y),
-                gamepad1.right_stick_x);
     }
 
     public void update() {

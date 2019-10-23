@@ -55,4 +55,16 @@ public class DriveTrain {
 
     }
 
+    public void moveInch(double angle, double r, double tanRight) {
+
+        if (r > 1)
+            r = 1;
+
+        this.FrontLeft = r * Math.cos(angle) * (2 / Math.sqrt(2)) + tanRight;
+        this.FrontRight = r * Math.sin(angle) * (2 / Math.sqrt(2)) - tanRight;
+        this.BackLeft = r * Math.sin(angle) * (2 / Math.sqrt(2)) + tanRight;
+        this.BackRight = r * Math.cos(angle) * (2 / Math.sqrt(2)) - tanRight;
+
+    }
+
 }

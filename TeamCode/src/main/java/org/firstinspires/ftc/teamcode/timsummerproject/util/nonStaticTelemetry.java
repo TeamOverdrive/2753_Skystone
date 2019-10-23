@@ -1,15 +1,12 @@
 package org.firstinspires.ftc.teamcode.timsummerproject.util;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.internal.opmode.TelemetryImpl;
 
 public class nonStaticTelemetry {
 
     public Telemetry telemetry;
-    public char[][] output = new char[50][100], override = new char[50][];
-    boolean[] SB = new boolean[50];
+    public char[][] output = new char[20][50], override = new char[20][];
+    boolean[] SB = new boolean[20];
     int side = 0, up = 0;
 
     public String runMode = "PRINT";
@@ -20,8 +17,8 @@ public class nonStaticTelemetry {
         for(int i = 0; i < SB.length; i++) {
             SB[i] = false;
         }
-        for (int i = 0; i < 50; i++) {
-            for (int k = 0; k < 100; k++) {
+        for (int i = 0; i < 20; i++) {
+            for (int k = 0; k < 50; k++) {
                 override[i][k] = ' ';
             }
         }
@@ -49,14 +46,14 @@ public class nonStaticTelemetry {
 
     }
     public void print() {
-        String[] systemOut = new String[50];
-        for(int i = 0; i < 50; i++) {
+        String[] systemOut = new String[20];
+        for(int i = 0; i < 20; i++) {
             if (!SB[i]) {
                 systemOut[i] = String.valueOf(this.getOverride(this.output[i],i));
             }
         }
         if (this.runMode.equals("PRINT")) {
-            for (int p = 0; p < 50; p++) {
+            for (int p = 0; p < 20; p++) {
                 if (this.SB[p]) {
                     this.telemetry.addLine(this.getScroll(this.output[p],p));
                 } else {
@@ -67,7 +64,7 @@ public class nonStaticTelemetry {
 
         }
         if (this.runMode.equals("SCROLL")) {
-            char[][] ScrollUpArrayMod = new char[50][];
+            char[][] ScrollUpArrayMod = new char[20][];
             for (int i = 0; i < ScrollUpArrayMod.length; i++) {
                 ScrollUpArrayMod[i] = this.getOverride(this.output[i + this.up],i);
                 this.telemetry.addLine(String.valueOf(ScrollUpArrayMod[i]));
@@ -85,8 +82,8 @@ public class nonStaticTelemetry {
         return String.valueOf(this.getOverride(outputArray,line));
     }
     private char[] getOverride(char[] input, int lineCheck) {
-        char[] output = new char[100];
-        for (int i = 0; i < 100; i++) {
+        char[] output = new char[50];
+        for (int i = 0; i < 50; i++) {
             if (!(this.override[lineCheck][i] == ' ')) {
                 if (this.override[lineCheck][i] == '*') {
                     output[i] = ' ';
@@ -98,5 +95,9 @@ public class nonStaticTelemetry {
             }
         }
         return output;
+    }
+    public void setPopUp(String line1,String line2, String line3, String line4, int x, int y) {
+        char[] output = new char[50];
+
     }
 }
