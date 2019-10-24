@@ -12,6 +12,8 @@ public class DriveTrain {
     public double BackLeft = 0;
     public double BackRight = 0;
 
+    public final double COUNTS_PER_INCH = 43.465342326685739;
+
 
     public DriveTrain() {
 
@@ -52,18 +54,6 @@ public class DriveTrain {
         this.FrontRight = speed;
         this.BackLeft = speed;
         this.BackRight = speed;
-
-    }
-
-    public void moveInch(double angle, double r, double tanRight) {
-
-        if (r > 1)
-            r = 1;
-
-        this.FrontLeft = r * Math.cos(angle) * (2 / Math.sqrt(2)) + tanRight;
-        this.FrontRight = r * Math.sin(angle) * (2 / Math.sqrt(2)) - tanRight;
-        this.BackLeft = r * Math.sin(angle) * (2 / Math.sqrt(2)) + tanRight;
-        this.BackRight = r * Math.cos(angle) * (2 / Math.sqrt(2)) - tanRight;
 
     }
 
