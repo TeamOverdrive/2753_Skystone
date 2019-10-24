@@ -37,7 +37,12 @@ public class TankDrive extends LinearOpMode {
         Context myApp = hardwareMap.appContext;
 
         waitForStart();
-        
+
+        telemetry2.addPopUp("##########   ",
+                            "#***ROBOT***#",
+                            "#***ALERT***#",
+                            "##########   ",  30, 1);
+
             while (opModeIsActive()) {
 /*
                 motorBackLeft.setPower(-gamepad1.left_stick_y);
@@ -52,13 +57,17 @@ public class TankDrive extends LinearOpMode {
                         telemetry2.side++;
                     runtime.reset();
                 }
+                telemetry2.setLine("                                                               ", 2);
+                telemetry2.setLine("                                                               ",3);
+                telemetry2.setLine("                                                               ",1);
+                telemetry2.setLine("                                                               ",4);
 
-                telemetry2.setLine("                    This text should be scrolling across the screen!",2);
-                telemetry2.setScrollLine(2,true);
+                //telemetry2.setScrollLine(2,true);
                 telemetry2.print();
                 if (!(telemetry2.output[2] == null)) {
-                    telemetry.addLine("Uh Oh");
-                    telemetry.update();
+                    for (int i = 0; i < telemetry2.backupText.length; i++) {
+                        telemetry.addLine(telemetry2.backupText[i]);
+                    }
                 }
 
             }
