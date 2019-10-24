@@ -4,12 +4,14 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.timsummerproject.subsystems.DriveTrain;
+import org.firstinspires.ftc.teamcode.timsummerproject.util.nonStaticTelemetry;
 
 
 @TeleOp(name = "Teleop", group = "TeleOp")
@@ -20,7 +22,13 @@ public class Teleop extends LinearOpMode {
     private DcMotor motorFrontLeft;
     private DcMotor motorFrontRight;
 
+    String currentDriveMode = "Field-Centric";
+
     DriveTrain drive = new DriveTrain();
+
+    private ElapsedTime runtime = new ElapsedTime();
+
+    nonStaticTelemetry telemetry2 = new nonStaticTelemetry(telemetry);
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -40,25 +48,34 @@ public class Teleop extends LinearOpMode {
 
         waitForStart();
 
+        telemetry2.addPopUp("                                                 ",
+                            "__________________________________________",
+                             "                                             ",
+                              "                                                  ", 0 , 0);
+
         while(opModeIsActive()) {
 
             initMotors();
             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            if (gamepad1.right_trigger > 0)
+            if (gamepad1.right_trigger > 0) {
+                currentDriveMode = "Drag Turning";
                 if (gamepad1.left_stick_y > 0) {
                     customMove(-gamepad1.right_trigger, false);
-                }
-                else
-                customMove(gamepad1.right_trigger, true);
-            else if (gamepad1.left_trigger > 0)
+                } else
+                    customMove(gamepad1.right_trigger, true);
+            }
+            else if (gamepad1.left_trigger > 0) {
+                currentDriveMode = "Drag Turning";
                 if (gamepad1.left_stick_y > 0) {
                     customMove(-gamepad1.left_trigger, true);
-                }
-                else
-                customMove(gamepad1.left_trigger, false);
+                } else
+                    customMove(gamepad1.left_trigger, false);
+            }
             else if (gamepad1.left_bumper && (Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y) > 0.2)){
 
+                currentDriveMode = "Smart Mode";
                 while (gamepad1.right_bumper) {
+                    currentDriveMode = "BRAKE";
                     setBrake();
                     stopMove();
                     removeBrake();
@@ -67,7 +84,9 @@ public class Teleop extends LinearOpMode {
                 update();
             }
             else {
+                currentDriveMode = "Field-Centric";
                 while (gamepad1.right_bumper) {
+                    currentDriveMode = "BRAKE";
                     setBrake();
                     stopMove();
                     removeBrake();
@@ -75,6 +94,40 @@ public class Teleop extends LinearOpMode {
 
                 teleDrive(angles);
                 update();
+                if (this.runtime.seconds() > 0.1) {
+                    if (telemetry2.side > 50)
+                        telemetry2.side = 0;
+                    else
+                        telemetry2.side++;
+                    runtime.reset();
+                }
+
+                if (!(telemetry2.output[2] == null)) {
+                    for (int i = 0; i < telemetry2.backupText.length; i++) {
+                        telemetry.addLine(telemetry2.backupText[i]);
+                    }
+                }
+                telemetry2.setLine("Drive Train Mode: " + currentDriveMode + "    Gamepad1 Active: " + !gamepad1.atRest() +
+                        "   |                                                                               ",0);
+                telemetry2.setLine("      Pwr-LB: " + drive.BackLeft + " Pwr-RB: " + drive.BackRight + " Pwr-LF: " + drive.FrontLeft
+                        + " Pwr-RF: " + drive.FrontRight,2);
+                telemetry2.setScrollLine(2, true);
+                telemetry2.setLine("      1st-angle: " + angles.firstAngle + " 2nd-angle: " + angles.secondAngle +
+                        " 3rd-angle: " + angles.thirdAngle,3);
+                telemetry2.setScrollLine(3, true);
+                if (Math.abs(angles.secondAngle) > 8 || Math.abs(angles.thirdAngle) > 8 )
+                    telemetry2.addPopUp("##########     ",
+                                        "#****Robot****#",
+                                        "#**Tipping!***#",
+                                        "##########     ", 0 , 2);
+                else
+                    telemetry2.addPopUp("               ",
+                                        "               ",
+                                        "               ",
+                                        "               ", 0 , 2);
+                telemetry2.print();
+
+
             }
 
 
@@ -116,11 +169,11 @@ public class Teleop extends LinearOpMode {
         }
         if (-relativeAngle + Math.PI/4> 0) {
             drive.move(relativeAngle, Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y),
-                    0.6);
+                    1.2);
         }
         else if (-relativeAngle +  Math.PI/4 < 0) {
             drive.move(relativeAngle, Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y),
-                    -0.6);
+                    -1.2);
         } else {
             drive.move(relativeAngle, Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y),
                     0);
