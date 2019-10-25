@@ -6,7 +6,7 @@ public class nonStaticTelemetry {
 
     public Telemetry telemetry;
     public char[][] output, override;
-    boolean[] SB = new boolean[10];
+    boolean[] SB = new boolean[12];
     public int side = 0, up = 0;
 
     public String[] backupText;
@@ -16,15 +16,15 @@ public class nonStaticTelemetry {
     utilities util = new utilities();
     public nonStaticTelemetry(Telemetry telemetryImport) {
         telemetry = telemetryImport;
-        override = new char[10][70];
-        output = new char[10][70];
+        override = new char[12][70];
+        output = new char[12][70];
 
-        backupText = new String[10];
+        backupText = new String[12];
 
         for(int i = 0; i < SB.length; i++) {
             SB[i] = false;
         }
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 12; i++) {
             for (int k = 0; k < 70; k++) {
                 override[i][k] = ' ';
             }
@@ -53,8 +53,8 @@ public class nonStaticTelemetry {
 
     }
     public void print() {
-        String[] systemOut = new String[10];
-        for(int i = 0; i < 10; i++) {
+        String[] systemOut = new String[12];
+        for(int i = 0; i < 12; i++) {
             if (!SB[i]) {
                 if (!(output[i] == null)) {
                     systemOut[i] = String.valueOf(this.getOverride(this.output[i], i));
@@ -63,7 +63,7 @@ public class nonStaticTelemetry {
             }
         }
         if (this.runMode.equals("PRINT")) {
-            for (int p = 0; p < 10; p++) {
+            for (int p = 0; p < 12; p++) {
                 if (this.SB[p]) {
                     if (!(output[p] == null)) {
                         this.backupText[p] = String.valueOf(this.getOverride(this.util.StringToChar(this.getScroll(this.output[p],
@@ -84,7 +84,7 @@ public class nonStaticTelemetry {
             this.telemetry.update();
         }
         if (this.runMode.equals("SCROLL")) {
-            char[][] ScrollUpArrayMod = new char[10][];
+            char[][] ScrollUpArrayMod = new char[12][];
             for (int i = 0; i < ScrollUpArrayMod.length; i++) {
                 ScrollUpArrayMod[i] = this.getOverride(this.output[i + this.up],i);
                 this.telemetry.addLine(String.valueOf(ScrollUpArrayMod[i]));
@@ -115,7 +115,10 @@ public class nonStaticTelemetry {
                     output[i] = this.override[lineCheck][i];
                 }
             } else {
-                output[i] = input[i];
+                if (input.length <= i)
+                    output[i] = ' ';
+                else
+                    output[i] = input[i];
             }
         }
         return output;

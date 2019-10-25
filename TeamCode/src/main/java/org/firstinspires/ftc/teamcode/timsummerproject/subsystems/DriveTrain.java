@@ -14,6 +14,8 @@ public class DriveTrain {
 
     public final double COUNTS_PER_INCH = 43.465342326685739;
 
+    public float speedMax = (float) (2 / Math.sqrt(2));
+
 
     public DriveTrain() {
 

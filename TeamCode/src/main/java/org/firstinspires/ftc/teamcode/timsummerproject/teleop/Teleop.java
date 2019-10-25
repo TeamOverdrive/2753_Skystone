@@ -27,6 +27,10 @@ public class Teleop extends LinearOpMode {
     private float aPos = 2753, bPos = 2753, xPos = 2753, yPos = 2753;
     DriveTrain drive = new DriveTrain();
 
+    int lnSelect = 7;
+    float rotateSpeed = 1, speedReduction = 1;
+    boolean autoBrake, wasdpadDown = false, wasdpadUp = false;
+
     private ElapsedTime runtime = new ElapsedTime();
 
     nonStaticTelemetry telemetry2 = new nonStaticTelemetry(telemetry);
@@ -49,10 +53,8 @@ public class Teleop extends LinearOpMode {
 
         waitForStart();
 
-        telemetry2.addPopUp("                                                 ",
-                            "__________________________________________",
-                             "                                             ",
-                              "                                                  ", 0 , 0);
+        telemetry2.setLine("__________________________________________", 1);
+        telemetry2.setLine("               ", 6);
 
         while(opModeIsActive()) {
 
@@ -90,6 +92,7 @@ public class Teleop extends LinearOpMode {
                     aPos = angles.firstAngle;
                 } else {
                     teleDriveSaved(angles,aPos);
+                    update();
                 }
             }
             else if (gamepad1.b) {
@@ -98,6 +101,7 @@ public class Teleop extends LinearOpMode {
                     bPos = angles.firstAngle;
                 } else {
                     teleDriveSaved(angles,bPos);
+                    update();
                 }
             }
             else if (gamepad1.x) {
@@ -106,6 +110,7 @@ public class Teleop extends LinearOpMode {
                     xPos = angles.firstAngle;
                 } else {
                     teleDriveSaved(angles,xPos);
+                    update();
                 }
             }
             else if (gamepad1.y) {
@@ -114,6 +119,7 @@ public class Teleop extends LinearOpMode {
                     yPos = angles.firstAngle;
                 } else {
                     teleDriveSaved(angles,yPos);
+                    update();
                 }
             }
             else {
@@ -127,44 +133,108 @@ public class Teleop extends LinearOpMode {
 
                 teleDrive(angles);
                 update();
-                if (this.runtime.seconds() > 0.1) {
-                    if (telemetry2.side > 50)
-                        telemetry2.side = 0;
-                    else
-                        telemetry2.side++;
-                    runtime.reset();
-                }
-
-                if (!(telemetry2.output[2] == null)) {
-                    for (int i = 0; i < telemetry2.backupText.length; i++) {
-                        telemetry.addLine(telemetry2.backupText[i]);
-                    }
-                }
-                telemetry2.setLine("Drive Train Mode: " + currentDriveMode + "    Gamepad1 Active: " + !gamepad1.atRest() +
-                        "   |                                                                               ",0);
-                telemetry2.setLine("      Pwr-LB: " + drive.BackLeft + " Pwr-RB: " + drive.BackRight + " Pwr-LF: " + drive.FrontLeft
-                        + " Pwr-RF: " + drive.FrontRight,2);
-                telemetry2.setScrollLine(2, true);
-                telemetry2.setLine("      1st-angle: " + angles.firstAngle + " 2nd-angle: " + angles.secondAngle +
-                        " 3rd-angle: " + angles.thirdAngle,3);
-                telemetry2.setScrollLine(3, true);
-                telemetry2.setLine("      aPos: " + aPos + " bPos: " + bPos +
-                        " xPos: " + xPos + " yPos: " + yPos + "            ",4);
-                telemetry2.setScrollLine(4, true);
-                if (Math.abs(angles.secondAngle) > 8 || Math.abs(angles.thirdAngle) > 8 )
-                    telemetry2.addPopUp("##########     ",
-                                        "#****Robot****#",
-                                        "#**Tipping!***#",
-                                        "##########     ", 0 , 2);
-                else
-                    telemetry2.addPopUp("               ",
-                                        "               ",
-                                        "               ",
-                                        "               ", 0 , 2);
-                telemetry2.print();
-
 
             }
+            if (this.runtime.seconds() > 0.1) {
+                if (telemetry2.side > 50)
+                    telemetry2.side = 0;
+                else
+                    telemetry2.side++;
+                runtime.reset();
+            }
+            if (gamepad1.dpad_up) {
+                if (!wasdpadUp) {
+                    lnSelect--;
+                }
+                wasdpadUp = true;
+            } else {
+                wasdpadUp = false;
+            }
+            if (gamepad1.dpad_down) {
+                if (!wasdpadDown) {
+                    lnSelect++;
+                }
+                wasdpadDown = true;
+            }
+            else {
+                wasdpadUp = false;
+            }
+
+            if (gamepad1.dpad_right) {
+                if (lnSelect == 7) {
+                    speedReduction = (float) 0.6;
+                } else if (lnSelect == 8) {
+                    drive.speedMax = (float) (2 / Math.sqrt(2));
+                } else if (lnSelect == 9) {
+                    rotateSpeed = (float) 0.6;
+                } else if (lnSelect == 10) {
+                    autoBrake = true;
+                }
+            }
+            if (gamepad1.dpad_left) {
+                if (lnSelect == 7) {
+                    speedReduction = 1;
+                } else if (lnSelect == 8) {
+                    drive.speedMax = 1;
+                } else if (lnSelect == 9) {
+                    rotateSpeed = 1;
+                } else if (lnSelect == 10) {
+                    autoBrake = false;
+                }
+            }
+            if (lnSelect == 6)
+                lnSelect = 7;
+            if (lnSelect == 11)
+                lnSelect = 10;
+
+            if (!(telemetry2.output[2] == null)) {
+                for (int i = 0; i < telemetry2.backupText.length; i++) {
+                    telemetry.addLine(telemetry2.backupText[i]);
+                }
+            }
+            telemetry2.setLine("Drive Train Mode: " + currentDriveMode + "    Gamepad1 Active: " + !gamepad1.atRest() +
+                    "   |                                                                               ",0);
+            telemetry2.setLine("      Pwr-LB: " + drive.BackLeft + " Pwr-RB: " + drive.BackRight + " Pwr-LF: " + drive.FrontLeft
+                    + " Pwr-RF: " + drive.FrontRight,2);
+            telemetry2.setScrollLine(2, true);
+            telemetry2.setLine("      1st-angle: " + angles.firstAngle + " 2nd-angle: " + angles.secondAngle +
+                    " 3rd-angle: " + angles.thirdAngle,3);
+            telemetry2.setScrollLine(3, true);
+            telemetry2.setLine("      aPos: " + aPos + " bPos: " + bPos +
+                    " xPos: " + xPos + " yPos: " + yPos,4);
+            telemetry2.setScrollLine(4, true);
+            if (Math.abs(angles.secondAngle) > 8 || Math.abs(angles.thirdAngle) > 8 )
+                telemetry2.addPopUp("##########     ",
+                        "#****Robot****#",
+                        "#**Tipping!***#",
+                        "##########     ", 0 , 2);
+            else
+                telemetry2.addPopUp("               ",
+                        "               ",
+                        "               ",
+                        "               ", 0 , 2);
+            telemetry2.setLine("________________________________________",5);
+            if (speedReduction == 1)
+                telemetry2.setLine("   Speed Reduction: INACTIVE",7);
+            else
+                telemetry2.setLine("   Speed Reduction: ACTIVE",7);
+            if (drive.speedMax > 1)
+                telemetry2.setLine("   Speed Max: ACTIVE",8);
+            else
+                telemetry2.setLine("   Speed Max: INACTIVE",8);
+            if (rotateSpeed == 1)
+                telemetry2.setLine("   Slowed Turning: INACTIVE",9);
+            else
+                telemetry2.setLine("   Slowed Turning: ACTIVE",9);
+            if (autoBrake)
+                telemetry2.setLine("   Auto Braking: ACTIVE",10);
+            else
+                telemetry2.setLine("   Auto Braking: INACTIVE",10);
+
+            telemetry2.override[lnSelect-1][1] = ' ';
+            telemetry2.override[lnSelect+1][1] = ' ';
+            telemetry2.override[lnSelect][1] = '>';
+            telemetry2.print();
 
 
         }
