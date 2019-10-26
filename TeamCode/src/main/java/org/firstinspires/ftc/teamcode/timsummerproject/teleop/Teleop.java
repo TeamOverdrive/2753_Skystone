@@ -58,7 +58,7 @@ public class    Teleop extends LinearOpMode {
 
         while(opModeIsActive()) {
 
-            //initMotors();
+            initMotors();
             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             if (gamepad1.right_trigger > 0) {
                 currentDriveMode = "Drag Turning";
@@ -89,36 +89,44 @@ public class    Teleop extends LinearOpMode {
             else if (gamepad1.a) {
                 currentDriveMode = "Target-A";
                 if (aPos == 2753) {
-                    aPos = angles.firstAngle;
+                    aPos = angles.firstAngle - 180;
+                    if (aPos < -180)
+                        aPos = -aPos;
                 } else {
                     teleDrive(angles,aPos);
-                    //update();
+                    update();
                 }
             }
             else if (gamepad1.b) {
                 currentDriveMode = "Target-B";
                 if (bPos == 2753) {
-                    bPos = angles.firstAngle;
+                    bPos = angles.firstAngle - 180;
+                    if (bPos < -180)
+                        bPos = -bPos;
                 } else {
                     teleDrive(angles,bPos);
-                    //update();
+                    update();
                 }
             }
             else if (gamepad1.x) {
                 currentDriveMode = "Target-X";
                 if (xPos == 2753) {
-                    xPos = angles.firstAngle;
+                    xPos = angles.firstAngle - 180;
+                    if (xPos < -180)
+                        xPos = -xPos;
                 } else {
                     teleDrive(angles,xPos);
-                    //update();
+                    update();
                 }
             }
               currentDriveMode = "Target-Y";
                 if (yPos == 2753) {
-                    yPos = angles.firstAngle;
+                    yPos = angles.firstAngle - 180;
+                    if (yPos < -180)
+                        yPos = -yPos;
                 } else {
                     teleDrive(angles,yPos);
-                    //update();
+                    update();
                 }
             }
             else {
@@ -131,8 +139,13 @@ public class    Teleop extends LinearOpMode {
                 }
 
                 teleDrive(angles);
-                //update();
+                update();
 
+            }
+            if (autoBrake) {
+                setBrake();
+            } else {
+                removeBrake();
             }
             if (this.runtime.seconds() > 0.1) {
                 if (telemetry2.side > 50)
@@ -196,13 +209,13 @@ public class    Teleop extends LinearOpMode {
                     "   |                                                                               ",0);
             telemetry2.setLine("      Pwr-LB: " + drive.BackLeft + " Pwr-RB: " + drive.BackRight + " Pwr-LF: " + drive.FrontLeft
                     + " Pwr-RF: " + drive.FrontRight,2);
-            telemetry2.setScrollLine(2, true);
+            telemetry2.setScrollLine(2, false);
             telemetry2.setLine("      1st-angle: " + angles.firstAngle + " 2nd-angle: " + angles.secondAngle +
                     " 3rd-angle: " + angles.thirdAngle,3);
-            telemetry2.setScrollLine(3, true);
+            telemetry2.setScrollLine(3, false);
             telemetry2.setLine("      aPos: " + aPos + " bPos: " + bPos +
                     " xPos: " + xPos + " yPos: " + yPos,4);
-            telemetry2.setScrollLine(4, true);
+            telemetry2.setScrollLine(4, false);
             if (Math.abs(angles.secondAngle) > 8 || Math.abs(angles.thirdAngle) > 8 )
                 telemetry2.addPopUp("##########     ",
                         "#****Robot****#",
@@ -261,8 +274,8 @@ public class    Teleop extends LinearOpMode {
                 relativeAngle = Math.PI * 2 - Math.abs(relativeAngle);
         }
 
-        drive.move(relativeAngle, Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y),
-                gamepad1.right_stick_x);
+        drive.move(relativeAngle, Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y) * speedReduction,
+                gamepad1.right_stick_x * rotateSpeed);
     }
     public void teleDriveSMART(Orientation angles) {
         double relativeAngle;
@@ -274,14 +287,14 @@ public class    Teleop extends LinearOpMode {
                 relativeAngle = Math.PI * 2 - Math.abs(relativeAngle);
         }
         if (-relativeAngle + Math.PI/4> 0) {
-            drive.move(relativeAngle, Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y),
+            drive.move(relativeAngle, Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y)* speedReduction,
                     1.2);
         }
         else if (-relativeAngle +  Math.PI/4 < 0) {
-            drive.move(relativeAngle, Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y),
+            drive.move(relativeAngle, Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y)* speedReduction,
                     -1.2);
         } else {
-            drive.move(relativeAngle, Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y),
+            drive.move(relativeAngle, Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y)* speedReduction,
                     0);
         }
     }
@@ -331,14 +344,14 @@ public class    Teleop extends LinearOpMode {
     }
     public void teleDrive(Orientation angles, float target) {
         double relativeAngle;
-        relativeAngle = (Math.atan2(-gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4) - Math.toRadians(angles.firstAngle);
+        relativeAngle = (Math.atan2(-gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI/4) - Math.toRadians(angles.firstAngle)- Math.PI / 4;
         if (Math.abs(relativeAngle) > Math.PI) {
             if (relativeAngle > 0)
                 relativeAngle = -(Math.PI * 2 - Math.abs(relativeAngle));
             else if (relativeAngle < 0)
                 relativeAngle = Math.PI * 2 - Math.abs(relativeAngle);
         }
-        double relativeTarget = target - Math.PI/4 - Math.toRadians(angles.firstAngle);
+        double relativeTarget = Math.toRadians(target) - Math.toRadians(angles.firstAngle);
         if (Math.abs(relativeTarget) > Math.PI) {
             if (relativeTarget > 0)
                 relativeTarget = -(Math.PI * 2 - Math.abs(relativeTarget));
@@ -347,11 +360,12 @@ public class    Teleop extends LinearOpMode {
         }
 
         if (relativeTarget > 0) {
-            drive.move(relativeAngle, Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y),
-                    Math.sqrt(Math.abs(relativeTarget - Math.PI/4)/Math.PI));
+            drive.move(relativeAngle, Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y)* speedReduction,
+                    (Math.abs(relativeAngle/Math.PI)));
         } else {
-            drive.move(relativeAngle, Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y),
-                    -Math.sqrt(Math.abs(relativeTarget - Math.PI/4)/Math.PI));
+            drive.move(relativeAngle, Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y)* speedReduction,
+                    - (Math.abs(relativeAngle/Math.PI)));
+
         }
 
     }

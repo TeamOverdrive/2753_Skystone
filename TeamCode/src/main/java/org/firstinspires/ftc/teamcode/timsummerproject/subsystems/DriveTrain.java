@@ -26,10 +26,10 @@ public class DriveTrain {
         if (r > 1)
             r = 1;
 
-        this.FrontLeft = r * Math.cos(angle) * (2 / Math.sqrt(2)) + tanRight;
-        this.FrontRight = r * Math.sin(angle) * (2 / Math.sqrt(2)) - tanRight;
-        this.BackLeft = r * Math.sin(angle) * (2 / Math.sqrt(2)) + tanRight;
-        this.BackRight = r * Math.cos(angle) * (2 / Math.sqrt(2)) - tanRight;
+        this.FrontLeft = (r * Math.cos(angle) * this.speedMax) + tanRight;
+        this.FrontRight = (r * Math.sin(angle) * this.speedMax) - tanRight;
+        this.BackLeft = (r * Math.sin(angle) * this.speedMax) + tanRight;
+        this.BackRight = (r * Math.cos(angle) * this.speedMax) - tanRight;
 
     }
 
