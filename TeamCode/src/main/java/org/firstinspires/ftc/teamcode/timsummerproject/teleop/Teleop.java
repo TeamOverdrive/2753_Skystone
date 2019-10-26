@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.timsummerproject.util.nonStaticTelemetry;
 
 
 @TeleOp(name = "Teleop", group = "TeleOp")
-public class Teleop extends LinearOpMode {
+public class    Teleop extends LinearOpMode {
 
     private DcMotor motorBackLeft;
     private DcMotor motorBackRight;
@@ -113,8 +113,7 @@ public class Teleop extends LinearOpMode {
                     //update();
                 }
             }
-            else if (gamepad1.y) {
-                currentDriveMode = "Target-Y";
+              currentDriveMode = "Target-Y";
                 if (yPos == 2753) {
                     yPos = angles.firstAngle;
                 } else {

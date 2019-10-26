@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.timsummerproject;
+package org.firstinspires.ftc.teamcode.timsummerproject.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -127,6 +127,10 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
     private static final float bridgeX = 5.18f * mmPerInch;
     private static final float bridgeRotY = 59;                                 // Units are degrees
     private static final float bridgeRotZ = 180;
+    public static double zPosition;
+    public static double xPosition;
+    public static double yPosition;
+
 
     // Constants for perimeter targets
     private static final float halfField = 72 * mmPerInch;
@@ -379,17 +383,11 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
                 telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                         translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
-                double yPosition = translation.get(1);
+                yPosition = translation.get(1);
 
-                if (yPosition > 70 ) {
-                    positionSkystone = "right";
-                }
-                else if (yPosition < -70 ) {
-                    positionSkystone = "left";
-                }
-                else if (yPosition > -70 && yPosition < 70) {
+                        //y is parallel to the long side of the block, x is perpendicular to the long side
 
-                }
+
                 if (yPosition >30 ) {
                     positionSkystone = "right";
                 }
@@ -402,7 +400,7 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
 
 
 
-                double xPosition = translation.get(0);
+                xPosition = translation.get(0);
 
                 if (xPosition >30) {
                     positionSkystone = "far";
@@ -413,9 +411,15 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
                 }
 
 
-                double zPosition = translation.get(2);
-                
+                zPosition = translation.get(2);
 
+                public double getxPosition() {
+                    return xPosition;
+                }
+
+                public double getyPosition() {
+
+                }
 
                 // express the rotation of the robot in degrees.
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
@@ -426,8 +430,17 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
                 telemetry.addData("Visible Target", "none");
             }
             telemetry.addData("Skystone Position", positionSkystone);
-            telemetry.update();
+
+
+        if (yPosition <-3){
+            double xPos);
+
+
+
         }
+
+
+
 
         // Disable Tracking when we are done;
         targetsSkyStone.deactivate();

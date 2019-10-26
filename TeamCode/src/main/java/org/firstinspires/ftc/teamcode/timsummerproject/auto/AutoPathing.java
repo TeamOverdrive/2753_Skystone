@@ -19,7 +19,9 @@ public class AutoPathing extends LinearOpMode {
     DcMotor motorBackRight;
     DcMotor motorFrontLeft;
     DcMotor motorFrontRight;
-
+    double xPos;
+    double yPos;
+    double zPos;
 
     public void runOpMode() {
 
@@ -124,6 +126,9 @@ public class AutoPathing extends LinearOpMode {
         motorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        xPos = ConceptVuforiaSkyStoneNavigation.xPosition;
+        yPos = ConceptVuforiaSkyStoneNavigation.yPosition;
+        zPos = ConceptVuforiaSkyStoneNavigation.zPosition;
 
     }
 
