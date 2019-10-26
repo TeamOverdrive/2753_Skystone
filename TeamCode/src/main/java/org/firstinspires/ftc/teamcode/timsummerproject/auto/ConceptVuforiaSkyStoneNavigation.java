@@ -96,7 +96,7 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
     // NOTE: If you are running on a CONTROL HUB, with only one USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     //
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
-    private static final boolean PHONE_IS_PORTRAIT = false  ;
+    private static final boolean PHONE_IS_PORTRAIT = false;
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -115,8 +115,8 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
 
     // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
     // We will define some constants and conversions here
-    private static final float mmPerInch        = 25.4f;
-    private static final float mmTargetHeight   = (6) * mmPerInch;          // the height of the center of the target image above the floor
+    private static final float mmPerInch = 25.4f;
+    private static final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
 
     // Constant for Stone Target
     private static final float stoneZ = 2.00f * mmPerInch;
@@ -134,17 +134,18 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
 
     // Constants for perimeter targets
     private static final float halfField = 72 * mmPerInch;
-    private static final float quadField  = 36 * mmPerInch;
+    private static final float quadField = 36 * mmPerInch;
 
     // Class Members
     private OpenGLMatrix lastLocation = null;
     private VuforiaLocalizer vuforia = null;
     private boolean targetVisible = false;
-    private float phoneXRotate    = 0;
-    private float phoneYRotate    = 0;
-    private float phoneZRotate    = 0;
+    private float phoneXRotate = 0;
+    private float phoneYRotate = 0;
+    private float phoneZRotate = 0;
 
-    @Override public void runOpMode() {
+    @Override
+    public void runOpMode() {
 
         waitForStart();
 
@@ -159,7 +160,7 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
         // VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection   = CAMERA_CHOICE;
+        parameters.cameraDirection = CAMERA_CHOICE;
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
@@ -252,7 +253,7 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
 
         front1.setLocation(OpenGLMatrix
                 .translation(-halfField, -quadField, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , 90)));
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 90)));
 
         front2.setLocation(OpenGLMatrix
                 .translation(-halfField, quadField, mmTargetHeight)
@@ -268,7 +269,7 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
 
         rear1.setLocation(OpenGLMatrix
                 .translation(halfField, quadField, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , -90)));
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
 
         rear2.setLocation(OpenGLMatrix
                 .translation(halfField, -quadField, mmTargetHeight)
@@ -297,18 +298,18 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
 
         // Rotate the phone vertical about the X axis if it's in portrait mode
         if (PHONE_IS_PORTRAIT) {
-            phoneXRotate = 90 ;
+            phoneXRotate = 90;
         }
 
         // Next, translate the camera lens to where it is on the robot.
         // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
-        final float CAMERA_FORWARD_DISPLACEMENT  = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot center
+        final float CAMERA_FORWARD_DISPLACEMENT = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot center
         final float CAMERA_VERTICAL_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
-        final float CAMERA_LEFT_DISPLACEMENT     = 0;     // eg: Camera is ON the robot's center line
+        final float CAMERA_LEFT_DISPLACEMENT = 0;     // eg: Camera is ON the robot's center line
 
         OpenGLMatrix robotFromCamera = OpenGLMatrix
-                    .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
-                    .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES, phoneYRotate, phoneZRotate, phoneXRotate));
+                .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES, phoneYRotate, phoneZRotate, phoneXRotate));
 
         /**  Let all the trackable listeners know where the phone is.  */
         for (VuforiaTrackable trackable : allTrackables) {
@@ -333,42 +334,42 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
             // check all the trackable targets to see which one (if any) is visible.
             targetVisible = false;
             for (VuforiaTrackable trackable : allTrackables) {
-                if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
+                if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
                     telemetry.addData("Target Name Length", trackable.getName().length());
 
-                    if(trackable.getName().equals("Stone Target")) {
+                    if (trackable.getName().equals("Stone Target")) {
                         telemetry.addLine("Stone Target Is Visible");
                     }
-                    if(trackable.getName().equals("Blue Perimeter " + 1)) {
+                    if (trackable.getName().equals("Blue Perimeter " + 1)) {
                         telemetry.addLine("Blue Perimeter 1 Is Visible");
                     }
-                    if(trackable.getName().equals("Blue Perimeter " + 2)) {
+                    if (trackable.getName().equals("Blue Perimeter " + 2)) {
                         telemetry.addLine("Blue Perimeter 2 Is Visible");
                     }
-                    if(trackable.getName().equals("Rear Perimeter 1")) {
+                    if (trackable.getName().equals("Rear Perimeter 1")) {
                         telemetry.addLine("Rear Perimeter 1 Is Visible");
                     }
-                    if(trackable.getName().equals("Rear Perimeter 2")) {
+                    if (trackable.getName().equals("Rear Perimeter 2")) {
                         telemetry.addLine("Rear Perimeter 2 Is Visible");
                     }
-                    if(trackable.getName().equals("Red Perimeter 1")) {
+                    if (trackable.getName().equals("Red Perimeter 1")) {
                         telemetry.addLine("Red Perimeter 1 Is Visible");
                     }
-                    if(trackable.getName().equals("Red Perimeter 2")) {
+                    if (trackable.getName().equals("Red Perimeter 2")) {
                         telemetry.addLine("Red Perimeter 2 Is Visible");
                     }
-                    if(trackable.getName().equals("Front Perimeter 1")) {
+                    if (trackable.getName().equals("Front Perimeter 1")) {
                         telemetry.addLine("Front Perimeter 1 Is Visible");
                     }
-                    if(trackable.getName().equals("Front Perimeter 2")) {
+                    if (trackable.getName().equals("Front Perimeter 2")) {
                         telemetry.addLine("Front Perimeter 2 Is Visible");
                     }
                     targetVisible = true;
 
                     // getUpdatedRobotLocation() will return null if no new information is available since
                     // the last time that call was made, or if the trackable is not currently visible.
-                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
+                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
                     if (robotLocationTransform != null) {
                         lastLocation = robotLocationTransform;
                     }
@@ -385,65 +386,50 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
 
                 yPosition = translation.get(1);
 
-                        //y is parallel to the long side of the block, x is perpendicular to the long side
+                //y is parallel to the long side of the block, x is perpendicular to the long side
 
 
-                if (yPosition >30 ) {
+                if (yPosition > 30) {
                     positionSkystone = "right";
-                }
-                else if (yPosition <-30 ) {
+                } else if (yPosition < -30) {
                     positionSkystone = "left";
-                }
-                else if (yPosition >-30 && yPosition <30) {
+                } else if (yPosition > -30 && yPosition < 30) {
                     positionSkystone = "center";
                 }
 
 
-
                 xPosition = translation.get(0);
 
-                if (xPosition >30) {
+                if (xPosition > 30) {
                     positionSkystone = "far";
 
-                }
-                else {
+                } else {
                     positionSkystone = "near";
                 }
 
 
                 zPosition = translation.get(2);
 
-                public double getxPosition() {
-                    return xPosition;
-                }
-
-                public double getyPosition() {
-
-                }
-
                 // express the rotation of the robot in degrees.
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
                 telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
-            }
-            else {
+            } else {
                 positionSkystone = "not visible";
                 telemetry.addData("Visible Target", "none");
             }
             telemetry.addData("Skystone Position", positionSkystone);
 
 
-        if (yPosition <-3){
-            double xPos);
+            if (yPosition < -3) {
+                double xPos;
 
 
+            }
 
+
+            // Disable Tracking when we are done;
+            targetsSkyStone.deactivate();
         }
 
-
-
-
-        // Disable Tracking when we are done;
-        targetsSkyStone.deactivate();
     }
-
 }

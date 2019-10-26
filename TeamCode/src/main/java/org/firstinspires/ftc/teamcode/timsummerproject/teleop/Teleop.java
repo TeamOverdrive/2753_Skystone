@@ -42,11 +42,11 @@ public class    Teleop extends LinearOpMode {
         Orientation angles;
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json";
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
@@ -56,7 +56,7 @@ public class    Teleop extends LinearOpMode {
         telemetry2.setLine("__________________________________________", 1);
         telemetry2.setLine("               ", 6);
 
-        while(opModeIsActive()) {
+        while (opModeIsActive()) {
 
             initMotors();
             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
@@ -66,15 +66,13 @@ public class    Teleop extends LinearOpMode {
                     customMove(-gamepad1.right_trigger, false);
                 } else
                     customMove(gamepad1.right_trigger, true);
-            }
-            else if (gamepad1.left_trigger > 0) {
+            } else if (gamepad1.left_trigger > 0) {
                 currentDriveMode = "Drag Turning";
                 if (gamepad1.left_stick_y > 0) {
                     customMove(-gamepad1.left_trigger, true);
                 } else
                     customMove(gamepad1.left_trigger, false);
-            }
-            else if (gamepad1.left_bumper && (Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x +  gamepad1.left_stick_y * gamepad1.left_stick_y) > 0.2)){
+            } else if (gamepad1.left_bumper && (Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x + gamepad1.left_stick_y * gamepad1.left_stick_y) > 0.2)) {
 
                 currentDriveMode = "Smart Mode";
                 while (gamepad1.right_bumper) {
@@ -85,47 +83,45 @@ public class    Teleop extends LinearOpMode {
                 }
                 teleDriveSMART(angles);
                 update();
-            }
-            else if (gamepad1.a) {
+            } else if (gamepad1.a) {
                 currentDriveMode = "Target-A";
                 if (aPos == 2753) {
                     aPos = angles.firstAngle - 180;
                     if (aPos < -180)
                         aPos = -aPos;
                 } else {
-                    teleDrive(angles,aPos);
+                    teleDrive(angles, aPos);
                     update();
                 }
-            }
-            else if (gamepad1.b) {
+            } else if (gamepad1.b) {
                 currentDriveMode = "Target-B";
                 if (bPos == 2753) {
                     bPos = angles.firstAngle - 180;
                     if (bPos < -180)
                         bPos = -bPos;
                 } else {
-                    teleDrive(angles,bPos);
+                    teleDrive(angles, bPos);
                     update();
                 }
-            }
-            else if (gamepad1.x) {
+            } else if (gamepad1.x) {
                 currentDriveMode = "Target-X";
                 if (xPos == 2753) {
                     xPos = angles.firstAngle - 180;
                     if (xPos < -180)
                         xPos = -xPos;
                 } else {
-                    teleDrive(angles,xPos);
+                    teleDrive(angles, xPos);
                     update();
                 }
             }
-              currentDriveMode = "Target-Y";
+            else if (gamepad1.y) {
+                currentDriveMode = "Target-Y";
                 if (yPos == 2753) {
                     yPos = angles.firstAngle - 180;
                     if (yPos < -180)
                         yPos = -yPos;
                 } else {
-                    teleDrive(angles,yPos);
+                    teleDrive(angles, yPos);
                     update();
                 }
             }
@@ -206,50 +202,48 @@ public class    Teleop extends LinearOpMode {
                 }
             }
             telemetry2.setLine("Drive Train Mode: " + currentDriveMode + "    Gamepad1 Active: " + !gamepad1.atRest() +
-                    "   |                                                                               ",0);
+                    "   |                                                                               ", 0);
             telemetry2.setLine("      Pwr-LB: " + drive.BackLeft + " Pwr-RB: " + drive.BackRight + " Pwr-LF: " + drive.FrontLeft
-                    + " Pwr-RF: " + drive.FrontRight,2);
+                    + " Pwr-RF: " + drive.FrontRight, 2);
             telemetry2.setScrollLine(2, false);
             telemetry2.setLine("      1st-angle: " + angles.firstAngle + " 2nd-angle: " + angles.secondAngle +
-                    " 3rd-angle: " + angles.thirdAngle,3);
+                    " 3rd-angle: " + angles.thirdAngle, 3);
             telemetry2.setScrollLine(3, false);
             telemetry2.setLine("      aPos: " + aPos + " bPos: " + bPos +
-                    " xPos: " + xPos + " yPos: " + yPos,4);
+                    " xPos: " + xPos + " yPos: " + yPos, 4);
             telemetry2.setScrollLine(4, false);
-            if (Math.abs(angles.secondAngle) > 8 || Math.abs(angles.thirdAngle) > 8 )
+            if (Math.abs(angles.secondAngle) > 8 || Math.abs(angles.thirdAngle) > 8)
                 telemetry2.addPopUp("##########     ",
                         "#****Robot****#",
                         "#**Tipping!***#",
-                        "##########     ", 0 , 2);
+                        "##########     ", 0, 2);
             else
                 telemetry2.addPopUp("               ",
                         "               ",
                         "               ",
-                        "               ", 0 , 2);
-            telemetry2.setLine("________________________________________",5);
+                        "               ", 0, 2);
+            telemetry2.setLine("________________________________________", 5);
             if (speedReduction == 1)
-                telemetry2.setLine("   Speed Reduction: INACTIVE",7);
+                telemetry2.setLine("   Speed Reduction: INACTIVE", 7);
             else
-                telemetry2.setLine("   Speed Reduction: ACTIVE",7);
+                telemetry2.setLine("   Speed Reduction: ACTIVE", 7);
             if (drive.speedMax > 1)
-                telemetry2.setLine("   Speed Max: ACTIVE",8);
+                telemetry2.setLine("   Speed Max: ACTIVE", 8);
             else
-                telemetry2.setLine("   Speed Max: INACTIVE",8);
+                telemetry2.setLine("   Speed Max: INACTIVE", 8);
             if (rotateSpeed == 1)
-                telemetry2.setLine("   Slowed Turning: INACTIVE",9);
+                telemetry2.setLine("   Slowed Turning: INACTIVE", 9);
             else
-                telemetry2.setLine("   Slowed Turning: ACTIVE",9);
+                telemetry2.setLine("   Slowed Turning: ACTIVE", 9);
             if (autoBrake)
-                telemetry2.setLine("   Auto Braking: ACTIVE",10);
+                telemetry2.setLine("   Auto Braking: ACTIVE", 10);
             else
-                telemetry2.setLine("   Auto Braking: INACTIVE",10);
+                telemetry2.setLine("   Auto Braking: INACTIVE", 10);
 
-            telemetry2.override[lnSelect-1][1] = ' ';
-            telemetry2.override[lnSelect+1][1] = ' ';
+            telemetry2.override[lnSelect - 1][1] = ' ';
+            telemetry2.override[lnSelect + 1][1] = ' ';
             telemetry2.override[lnSelect][1] = '>';
             telemetry2.print();
-
-
         }
 
     }

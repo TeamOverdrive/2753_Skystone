@@ -19,6 +19,7 @@ public class AutoPathing extends LinearOpMode {
     DcMotor motorBackRight;
     DcMotor motorFrontLeft;
     DcMotor motorFrontRight;
+
     double xPos;
     double yPos;
     double zPos;
