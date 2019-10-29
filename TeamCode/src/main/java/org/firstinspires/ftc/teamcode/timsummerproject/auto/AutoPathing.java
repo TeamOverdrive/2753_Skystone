@@ -33,9 +33,10 @@ public class AutoPathing extends LinearOpMode {
 
         motorBackRight.setDirection(DcMotor.Direction.REVERSE);
         motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
-
-
+        
         waitForStart();
+
+        moveInch(10,1,100);
 
 
 

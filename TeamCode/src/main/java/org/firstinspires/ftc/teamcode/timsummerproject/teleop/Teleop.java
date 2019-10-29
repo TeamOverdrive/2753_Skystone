@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.timsummerproject.teleop;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -86,7 +87,7 @@ public class    Teleop extends LinearOpMode {
             } else if (gamepad1.a) {
                 currentDriveMode = "Target-A";
                 if (aPos == 2753) {
-                    aPos = angles.firstAngle - 180;
+                    aPos = angles.firstAngle - 90;
                     if (aPos < -180)
                         aPos = -aPos;
                 } else {
@@ -96,7 +97,7 @@ public class    Teleop extends LinearOpMode {
             } else if (gamepad1.b) {
                 currentDriveMode = "Target-B";
                 if (bPos == 2753) {
-                    bPos = angles.firstAngle - 180;
+                    bPos = angles.firstAngle - 90;
                     if (bPos < -180)
                         bPos = -bPos;
                 } else {
@@ -106,7 +107,7 @@ public class    Teleop extends LinearOpMode {
             } else if (gamepad1.x) {
                 currentDriveMode = "Target-X";
                 if (xPos == 2753) {
-                    xPos = angles.firstAngle - 180;
+                    xPos = angles.firstAngle - 90;
                     if (xPos < -180)
                         xPos = -xPos;
                 } else {
@@ -117,7 +118,7 @@ public class    Teleop extends LinearOpMode {
             else if (gamepad1.y) {
                 currentDriveMode = "Target-Y";
                 if (yPos == 2753) {
-                    yPos = angles.firstAngle - 180;
+                    yPos = angles.firstAngle - 90;
                     if (yPos < -180)
                         yPos = -yPos;
                 } else {
