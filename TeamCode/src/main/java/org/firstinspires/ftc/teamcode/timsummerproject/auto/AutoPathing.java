@@ -57,6 +57,7 @@ public class AutoPathing extends LinearOpMode {
         else{
             drive.move(0);
         }
+        update();
 
 
 
