@@ -132,14 +132,14 @@ public class AutoPathing extends LinearOpMode {
         yPos = ConceptVuforiaSkyStoneNavigation.yPosition;
         zPos = ConceptVuforiaSkyStoneNavigation.zPosition;
 
-        if (xPos <60) {
-            motorBackLeftTP = 12;  //example value
+        if (yPos >60) {
+            motorBackLeftTP = 12;  //move left
         }
         else{
             setBrake();
         }
         if (yPos <29) {
-            motorBackLeftTP = 69; //example value
+            motorBackLeftTP = 69; //move right
         }
         else{
             setBrake();
