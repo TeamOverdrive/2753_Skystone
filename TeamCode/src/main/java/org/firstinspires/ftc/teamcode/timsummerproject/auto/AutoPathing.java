@@ -41,6 +41,25 @@ public class AutoPathing extends LinearOpMode {
 
         moveInch(24,0.1f,100);
 
+        xPos = ConceptVuforiaSkyStoneNavigation.xPosition;
+        yPos = ConceptVuforiaSkyStoneNavigation.yPosition;
+        zPos = ConceptVuforiaSkyStoneNavigation.zPosition;
+
+        if (yPos >60) {
+            drive.move("LEFT",1);
+        }
+        else{
+            drive.move(0);
+        }
+        if (yPos <29) {
+            drive.move("RIGHT",1);
+        }
+        else{
+            drive.move(0);
+        }
+
+
+
 
 
 
@@ -131,23 +150,6 @@ public class AutoPathing extends LinearOpMode {
         motorBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        xPos = ConceptVuforiaSkyStoneNavigation.xPosition;
-        yPos = ConceptVuforiaSkyStoneNavigation.yPosition;
-        zPos = ConceptVuforiaSkyStoneNavigation.zPosition;
-
-        if (yPos >60) {
-            motorBackLeftTP = 12;  //move left
-        }
-        else{
-            setBrake();
-        }
-        if (yPos <29) {
-            motorBackLeftTP = 69; //move right
-        }
-        else{
-            setBrake();
-        }
     }
 
 
