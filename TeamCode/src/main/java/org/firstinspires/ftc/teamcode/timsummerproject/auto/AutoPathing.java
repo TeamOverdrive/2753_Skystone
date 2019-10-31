@@ -37,6 +37,10 @@ public class AutoPathing extends LinearOpMode {
 
         waitForStart();
 
+        setBrake();
+
+        moveInch(24,0.1f,100);
+
 
 
 
@@ -111,6 +115,7 @@ public class AutoPathing extends LinearOpMode {
         motorFrontLeft.setPower(Math.abs(speed));
         motorBackLeft.setPower(Math.abs(speed));
 
+
         while (opModeIsActive() &&
                 (this.runtime.seconds() < timeout) &&
                 (motorFrontRight.isBusy() && motorBackRight.isBusy() && motorFrontLeft.isBusy() && motorBackLeft.isBusy())) {
@@ -126,10 +131,6 @@ public class AutoPathing extends LinearOpMode {
         motorBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        xPos = ConceptVuforiaSkyStoneNavigation.xPosition;
-        yPos = ConceptVuforiaSkyStoneNavigation.yPosition;
-        zPos = ConceptVuforiaSkyStoneNavigation.zPosition;
 
     }
 
