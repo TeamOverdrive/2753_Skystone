@@ -54,6 +54,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class rightDistanceSensor extends LinearOpMode {
 
     private DistanceSensor sensorRange;
+    public static double rightSens;
 
     @Override
     public void runOpMode() {
@@ -72,7 +73,6 @@ public class rightDistanceSensor extends LinearOpMode {
             // generic DistanceSensor methods.
             telemetry.addData("deviceName",sensorRange.getDeviceName() );
             telemetry.addData("range", String.format("%.01f mm", sensorRange.getDistance(DistanceUnit.MM)));
-
 
             // Rev2mDistanceSensor specific methods.
             telemetry.addData("ID", String.format("%x", sensorTimeOfFlight.getModelID()));

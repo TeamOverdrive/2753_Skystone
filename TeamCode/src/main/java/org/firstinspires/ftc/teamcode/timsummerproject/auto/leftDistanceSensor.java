@@ -54,7 +54,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class leftDistanceSensor extends LinearOpMode {
 
     private DistanceSensor sensorRange;
-
+    public static double leftSens;
     @Override
     public void runOpMode() {
         // you can use this as a regular DistanceSensor.
