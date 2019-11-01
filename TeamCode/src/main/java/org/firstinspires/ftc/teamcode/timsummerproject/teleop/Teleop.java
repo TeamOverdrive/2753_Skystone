@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.timsummerproject.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.timsummerproject.util.nonStaticTelemetry;
 
 
-@TeleOp(name = "Teleop", group = "TeleOp")
+@TeleOp(name = "Teleop1.x", group = "TeleOp")
 public class    Teleop extends LinearOpMode {
 
     private DcMotor motorBackLeft;

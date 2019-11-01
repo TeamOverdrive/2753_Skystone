@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.timsummerproject.auto;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -7,6 +8,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.timsummerproject.subsystems.DriveTrain;
@@ -32,26 +36,34 @@ public class AutoPathing extends LinearOpMode {
 
     public void runOpMode() {
 
+        BNO055IMU imu;
+
+
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+
         distRight = hardwareMap.get(DistanceSensor.class, "leftDistanceSensor");
         distLeft = hardwareMap.get(DistanceSensor.class, "leftDistanceSensor");
 
         // distRight.getDistance(DistanceUnit.MM)
         // distLeft.getDistance(DistanceUnit.MM)
 
-        motorBackLeft = hardwareMap.dcMotor.get("left_back");
-        motorBackRight = hardwareMap.dcMotor.get("right_back");
-        motorFrontLeft = hardwareMap.dcMotor.get("left_front");
-        motorFrontRight = hardwareMap.dcMotor.get("right_front");
-
-        motorBackRight.setDirection(DcMotor.Direction.REVERSE);
-        motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
-
+        initMotors();
 
         waitForStart();
 
         setBrake();
 
         moveInch(-24,0.1f,100);
+
+        turnTo(90,imu);
 
         xPos = ConceptVuforiaSkyStoneNavigation.xPosition;
         yPos = ConceptVuforiaSkyStoneNavigation.yPosition;
@@ -163,6 +175,31 @@ public class AutoPathing extends LinearOpMode {
         motorBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+    public void turnTo(double angle,BNO055IMU imu) {
+
+        Orientation angles;
+
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.YZX, AngleUnit.DEGREES);
+
+        while (!(angle <= angles.firstAngle + 1) && !(angle >= angles.firstAngle - 1)) {
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.YZX, AngleUnit.DEGREES);
+            double relativeTarget = Math.toRadians(angle) - Math.toRadians(angles.firstAngle);
+            if (Math.abs(relativeTarget) > Math.PI) {
+                if (relativeTarget > 0)
+                    relativeTarget = -(Math.PI * 2 - Math.abs(relativeTarget));
+                else if (relativeTarget < 0)
+                    relativeTarget = Math.PI * 2 - Math.abs(relativeTarget);
+            }
+
+            motorFrontRight.setPower((relativeTarget/Math.PI) * Math.abs(relativeTarget/Math.PI));
+            motorBackRight.setPower((relativeTarget/Math.PI) * Math.abs(relativeTarget/Math.PI));
+            motorFrontLeft.setPower(-((relativeTarget/Math.PI) * Math.abs(relativeTarget/Math.PI)));
+            motorBackLeft.setPower(-((relativeTarget/Math.PI) * Math.abs(relativeTarget/Math.PI)));
+
+
+        }
+
     }
 
 

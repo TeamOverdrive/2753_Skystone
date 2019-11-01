@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.timsummerproject.teleop;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -13,8 +14,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.timsummerproject.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.timsummerproject.util.nonStaticTelemetry;
 
-
-@TeleOp(name = "Teleop", group = "TeleOp")
+@Disabled
+@TeleOp(name = "Teleop2.1", group = "TeleOp")
 public class Teleop2 extends LinearOpMode {
 
     private DcMotor motorBackLeft;
@@ -23,6 +24,7 @@ public class Teleop2 extends LinearOpMode {
     private DcMotor motorFrontRight;
 
     DriveTrain drive = new DriveTrain();
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -47,7 +49,7 @@ public class Teleop2 extends LinearOpMode {
         while (opModeIsActive()) {
 
             initMotors();
-            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.YZX, AngleUnit.DEGREES);
             teleDrive(angles);
             if (gamepad1.left_bumper) {
                 setBrake(motorFrontLeft);
@@ -63,6 +65,10 @@ public class Teleop2 extends LinearOpMode {
                 setBrake(motorBackLeft);
                 setBrake(motorBackRight);
                 stopMove();
+            }
+            if (gamepad1.a) {
+                drive.move("RIGHT",1);
+                setBrake(motorFrontLeft);
             }
             drive.BackLeft += gamepad1.left_trigger;
             drive.FrontLeft += gamepad1.left_trigger;
