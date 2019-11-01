@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.timsummerproject.auto;
 
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.timsummerproject.subsystems.DriveTrain;
 
@@ -14,6 +17,9 @@ public class AutoPathing extends LinearOpMode {
     DriveTrain drive = new DriveTrain();
 
     private ElapsedTime runtime = new ElapsedTime();
+
+    private DistanceSensor distRight;
+    private DistanceSensor distLeft;
 
     DcMotor motorBackLeft;
     DcMotor motorBackRight;
@@ -25,6 +31,12 @@ public class AutoPathing extends LinearOpMode {
     double zPos;
 
     public void runOpMode() {
+
+        distRight = hardwareMap.get(DistanceSensor.class, "leftDistanceSensor");
+        distLeft = hardwareMap.get(DistanceSensor.class, "leftDistanceSensor");
+
+        // distRight.getDistance(DistanceUnit.MM)
+        // distLeft.getDistance(DistanceUnit.MM)
 
         motorBackLeft = hardwareMap.dcMotor.get("left_back");
         motorBackRight = hardwareMap.dcMotor.get("right_back");
@@ -39,7 +51,7 @@ public class AutoPathing extends LinearOpMode {
 
         setBrake();
 
-        moveInch(24,0.1f,100);
+        moveInch(-24,0.1f,100);
 
         xPos = ConceptVuforiaSkyStoneNavigation.xPosition;
         yPos = ConceptVuforiaSkyStoneNavigation.yPosition;
