@@ -102,18 +102,7 @@ public class AutoPathing extends LinearOpMode {
 
     public void runOpMode() {
 
-        BNO055IMU imu;
-
-
-        BNO055IMU.Parameters IMUparameters = new BNO055IMU.Parameters();
-        IMUparameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        IMUparameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        IMUparameters.calibrationDataFile = "BNO055IMUCalibration.json";
-        IMUparameters.loggingEnabled = true;
-        IMUparameters.loggingTag = "IMU";
-
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(IMUparameters);
+        initIMU();
 
         distRight = hardwareMap.get(DistanceSensor.class, "leftDistanceSensor");
         distLeft = hardwareMap.get(DistanceSensor.class, "leftDistanceSensor");
@@ -330,20 +319,12 @@ public class AutoPathing extends LinearOpMode {
         }
 
         waitForStart();
+
         setBrake();
-        telemetry.addData("yPos: ", yPos);
-        if (yPos > 4) {
-            moveInch(2,-2,0.3f,4);
-        }
-        else if (yPos < -4) {
-            moveInch(-1,2,0.3f,4);
-        }
 
-        moveInch(-12,0.1f,100);
+        moveInch(-4,1,2);
 
-        moveInch(-16,16,0.2f,10);
-
-
+        locateSkystone();
 
     }
 
@@ -357,6 +338,30 @@ public class AutoPathing extends LinearOpMode {
         motorBackRight.setDirection(DcMotor.Direction.REVERSE);
         motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
 
+    }
+    public void locateSkystone() {
+        if (!targetVisible) {
+            moveInch(-3,1,2);
+            if (distRight.getDistance(DistanceUnit.MM) > 500)
+                locateSkystone();
+            else {
+                while (distRight.getDistance(DistanceUnit.MM) > 10) {
+                    drive.move(1);
+                    update();
+                    
+                }
+            }
+        }
+        else if (yPos > 4) {
+            moveInch(2,-2,0.3f,4);
+            moveInch(16, -16, 0.4f,4);
+            moveInch(10,1,2);
+        }
+        else if (yPos < -4) {
+            moveInch(-1,2,0.3f,4);
+            moveInch(16, -16, 0.4f,4);
+            moveInch(10,1,2);
+        }
     }
 
     public void update() {
@@ -500,6 +505,20 @@ public class AutoPathing extends LinearOpMode {
         motorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+    public void initIMU() {
+        BNO055IMU imu;
+
+        BNO055IMU.Parameters IMUparameters = new BNO055IMU.Parameters();
+        IMUparameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        IMUparameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        IMUparameters.calibrationDataFile = "BNO055IMUCalibration.json";
+        IMUparameters.loggingEnabled = true;
+        IMUparameters.loggingTag = "IMU";
+
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(IMUparameters);
+    }
+
 
 
 
