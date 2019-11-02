@@ -336,7 +336,7 @@ public class AutoPathing extends LinearOpMode {
             } else if (targetVisible && (yPos < 0)) {
                 drive.move("RIGHT", 0.2f);
             } else if (!targetVisible){
-                drive.move(0.5f);
+                drive.move(-0.2f);
             } else if (yPos < 50 && yPos > -50) {
                 break;
             }
