@@ -342,7 +342,7 @@ public class AutoPathing extends LinearOpMode {
             }
         }
 
-        turnTo(90,imu);
+        turnTo(180,imu);
 
 
 
