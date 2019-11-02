@@ -86,7 +86,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  */
 
 
-@Autonomous(name="SKYSTONE Vuforia Nav", group ="Concept")
+@Autonomous(name="BROKEN", group ="Concept")
 public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
 
     // IMPORTANT:  For Phone Camera, set 1) the camera source and 2) the orientation, based on how your phone is mounted:
@@ -127,9 +127,9 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
     private static final float bridgeX = 5.18f * mmPerInch;
     private static final float bridgeRotY = 59;                                 // Units are degrees
     private static final float bridgeRotZ = 180;
-    double zPosition;
-    double xPosition;
-    double yPosition;
+    public static double zPosition;
+    public static double xPosition;
+    public static double yPosition;
 
 
     // Constants for perimeter targets
