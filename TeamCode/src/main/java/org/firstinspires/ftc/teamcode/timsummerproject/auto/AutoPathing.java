@@ -290,7 +290,7 @@ public class AutoPathing extends LinearOpMode {
 
         setBrake();
 
-        moveInch(-12,0.1f,100);
+        // moveInch(-12,0.1f,100);
         while (!isStopRequested()) {
 
             // check all the trackable targets to see which one (if any) is visible.
@@ -332,9 +332,11 @@ public class AutoPathing extends LinearOpMode {
             telemetry.update();
 
             if (targetVisible && (yPos > 0.1)) {
-                drive.move("RIGHT", 0.5f);
+                drive.move("LEFT", 0.2f);
+                turnTo(0,imu);
             } else if (targetVisible && (yPos < -0.1)) {
-                drive.move("LEFT", 0.5f);
+                drive.move("RIGHT", 0.2f);
+                turnTo(0,imu);
             } else if (!targetVisible){
                 moveInch(-2,0.2f,100);
             } else if (yPos < 0.1 && yPos > -0.1) {
