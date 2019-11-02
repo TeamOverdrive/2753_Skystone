@@ -14,7 +14,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.timsummerproject.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.timsummerproject.util.nonStaticTelemetry;
 
-@Disabled
 @TeleOp(name = "Teleop2.1", group = "TeleOp")
 public class Teleop2 extends LinearOpMode {
 
