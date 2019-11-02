@@ -292,7 +292,7 @@ public class AutoPathing extends LinearOpMode {
         setBrake();
 
         // moveInch(-12,0.1f,100);
-        while (!isStopRequested() && !foundStone) {
+        while (!isStopRequested()) {
 
             // check all the trackable targets to see which one (if any) is visible.
             targetVisible = false;
@@ -331,24 +331,22 @@ public class AutoPathing extends LinearOpMode {
             }
             telemetry.addData("Y-Position: ",yPos);
             telemetry.update();
-
+/*
             if (targetVisible && (yPos > 0)) {
                 drive.move("LEFT", 0.3f);
             } else if (targetVisible && (yPos < 0)) {
                 drive.move("RIGHT", 0.3f);
             } else if (!targetVisible){
-                if (distLeft.getDistance(DistanceUnit.MM) > 200)
                     drive.move(-0.3f);
-                else
-                    drive.move(0.3f);
             } else if (yPos < 50 && yPos > -50) {
-                foundStone = true;
             }
             update();
             if (runtime.seconds() > 4 && targetVisible) {
                 drive.move(0);
                 break;
             }
+            
+ */
         }
 
         turnTo(180,imu);
