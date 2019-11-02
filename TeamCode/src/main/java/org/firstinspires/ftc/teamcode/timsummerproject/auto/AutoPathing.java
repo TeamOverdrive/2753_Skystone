@@ -333,15 +333,22 @@ public class AutoPathing extends LinearOpMode {
             telemetry.update();
 
             if (targetVisible && (yPos > 0)) {
-                drive.move("LEFT", 0.2f);
+                drive.move("LEFT", 0.3f);
             } else if (targetVisible && (yPos < 0)) {
-                drive.move("RIGHT", 0.2f);
+                drive.move("RIGHT", 0.3f);
             } else if (!targetVisible){
-                drive.move(-0.2f);
+                if (distLeft.getDistance(DistanceUnit.MM) > 200)
+                    drive.move(-0.3f);
+                else
+                    drive.move(0.3f);
             } else if (yPos < 50 && yPos > -50) {
                 foundStone = true;
             }
             update();
+            if (runtime.seconds() > 4 && targetVisible) {
+                drive.move(0);
+                break;
+            }
         }
 
         turnTo(180,imu);
