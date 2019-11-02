@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.timsummerproject.teleop;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.timsummerproject.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.timsummerproject.util.nonStaticTelemetry;
 
 
+@Disabled
 @TeleOp(name = "Teleop1.x", group = "TeleOp")
 public class    Teleop extends LinearOpMode {
 

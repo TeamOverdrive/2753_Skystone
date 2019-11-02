@@ -92,6 +92,7 @@ import java.util.Locale;
  * is explained below.
  */
 
+@Disabled
 @TeleOp(name="Concept: Vuforia Nav Webcam", group ="Concept")
 public class ConceptVuforiaNavigationWebcam extends LinearOpMode {
 
