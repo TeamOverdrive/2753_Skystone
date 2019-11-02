@@ -127,9 +127,9 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
     private static final float bridgeX = 5.18f * mmPerInch;
     private static final float bridgeRotY = 59;                                 // Units are degrees
     private static final float bridgeRotZ = 180;
-    public static double zPosition;
-    public static double xPosition;
-    public static double yPosition;
+    double zPosition;
+    double xPosition;
+    double yPosition;
 
 
     // Constants for perimeter targets
