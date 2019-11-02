@@ -284,6 +284,8 @@ public class AutoPathing extends LinearOpMode {
 
         initMotors();
 
+        targetsSkyStone.activate();
+
         waitForStart();
 
         setBrake();
@@ -291,8 +293,6 @@ public class AutoPathing extends LinearOpMode {
         moveInch(-12,0.1f,100);
 
         turnTo(90,imu);
-
-        targetsSkyStone.activate();
         while (!isStopRequested()) {
 
             // check all the trackable targets to see which one (if any) is visible.
@@ -338,7 +338,7 @@ public class AutoPathing extends LinearOpMode {
                 drive.move("LEFT",0.5f);
             } else if (!targetVisible){
                 moveInch(2,0.1f,10);
-            } else {
+            } else if (targetVisible) {
                 break;
             }
         }
