@@ -74,7 +74,6 @@ public class AutoPathing extends LinearOpMode {
             if (ConceptVuforiaSkyStoneNavigation.yPos < 10 && ConceptVuforiaSkyStoneNavigation.yPos > -10)
                 break;
             update();
-            //telemetry.addData("Target?", ConceptVuforiaSkyStoneNavigation.);
         }
 
         turnTo(90,imu);
