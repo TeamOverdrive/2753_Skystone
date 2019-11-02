@@ -22,6 +22,7 @@ public class Teleop2 extends LinearOpMode {
     private DcMotor motorBackRight;
     private DcMotor motorFrontLeft;
     private DcMotor motorFrontRight;
+    private DcMotor intake;
 
     DriveTrain drive = new DriveTrain();
 
@@ -70,6 +71,7 @@ public class Teleop2 extends LinearOpMode {
                 drive.move("RIGHT",1);
                 setBrake(motorFrontLeft);
             }
+            intake.setPower(gamepad2.right_trigger);
             drive.BackLeft += gamepad1.left_trigger;
             drive.FrontLeft += gamepad1.left_trigger;
             drive.BackRight += gamepad1.right_trigger;
@@ -87,6 +89,7 @@ public class Teleop2 extends LinearOpMode {
         motorBackRight = hardwareMap.get(DcMotor.class, "right_back");
         motorFrontLeft = hardwareMap.get(DcMotor.class, "left_front");
         motorFrontRight = hardwareMap.get(DcMotor.class, "right_front");
+        intake = hardwareMap.get(DcMotor.class, "intake");
 
         motorBackRight.setDirection(DcMotor.Direction.REVERSE);
         motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
