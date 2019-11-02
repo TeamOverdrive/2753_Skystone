@@ -285,6 +285,12 @@ public class AutoPathing extends LinearOpMode {
         initMotors();
 
         targetsSkyStone.activate();
+
+        waitForStart();
+
+        setBrake();
+
+        moveInch(-12,0.1f,100);
         while (!isStopRequested()) {
 
             // check all the trackable targets to see which one (if any) is visible.
@@ -311,9 +317,9 @@ public class AutoPathing extends LinearOpMode {
                 telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                         translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
-                xPos = translation.get(0) / mmPerInch;
-                yPos = translation.get(1) / mmPerInch;
-                zPos = translation.get(2) / mmPerInch;
+                xPos = translation.get(0);
+                yPos = translation.get(1);
+                zPos = translation.get(2);
 
                 // express the rotation of the robot in degrees.
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
@@ -323,23 +329,17 @@ public class AutoPathing extends LinearOpMode {
                 telemetry.addData("Visible Target", "none");
             }
             telemetry.update();
-        }
 
-        waitForStart();
-
-        setBrake();
-
-        moveInch(-12,0.1f,100);
-        while (true) {
-            if (yPos > 0.1) {
+            if (targetVisible && (yPos > 0.1)) {
                 drive.move("RIGHT", 0.5f);
-            } else if (yPos < -0.1) {
+            } else if (targetVisible && (yPos < -0.1)) {
                 drive.move("LEFT", 0.5f);
+            } else if (!targetVisible){
+                moveInch(-2,0.2f,100);
             } else {
                 break;
             }
         }
-
 
         turnTo(180,imu);
 
