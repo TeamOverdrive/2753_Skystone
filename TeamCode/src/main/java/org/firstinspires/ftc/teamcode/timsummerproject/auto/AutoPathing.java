@@ -64,7 +64,7 @@ public class AutoPathing extends LinearOpMode {
         moveInch(-24,0.1f,100);
 
         turnTo(90,imu);
-
+        /*
         xPos = ConceptVuforiaSkyStoneNavigation.xPosition;
         yPos = ConceptVuforiaSkyStoneNavigation.yPosition;
         zPos = ConceptVuforiaSkyStoneNavigation.zPosition;
@@ -82,6 +82,8 @@ public class AutoPathing extends LinearOpMode {
             drive.move(0);
         }
         update();
+       
+         */
 
 
 
