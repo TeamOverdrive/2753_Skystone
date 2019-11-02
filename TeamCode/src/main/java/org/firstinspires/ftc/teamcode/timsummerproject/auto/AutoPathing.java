@@ -349,7 +349,7 @@ public class AutoPathing extends LinearOpMode {
  */         break;
         }
 
-        turnTo(90,imu);
+        moveInch(10,-10,0.3f,4);
 
 
 
@@ -466,6 +466,49 @@ public class AutoPathing extends LinearOpMode {
         }
 
     }
+
+    public void moveInch(int inchesLeft,int inchesRight, float speed, float timeout) {
+
+        int motorFrontRightTP = motorFrontRight.getCurrentPosition() + (int)(inchesRight * drive.COUNTS_PER_INCH);
+        int motorBackRightTP = motorBackRight.getCurrentPosition() + (int)(inchesRight * drive.COUNTS_PER_INCH);
+        int motorFrontLeftTP = motorFrontLeft.getCurrentPosition() + (int)(inchesLeft * drive.COUNTS_PER_INCH);
+        int motorBackLeftTP = motorBackLeft.getCurrentPosition() + (int)(inchesLeft * drive.COUNTS_PER_INCH);
+
+        motorFrontRight.setTargetPosition(motorFrontRightTP);
+        motorBackRight.setTargetPosition(motorBackRightTP);
+        motorFrontLeft.setTargetPosition(motorFrontLeftTP);
+        motorBackLeft.setTargetPosition(motorBackLeftTP);
+
+        motorFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        this.runtime.reset();
+
+        motorFrontRight.setPower(Math.abs(speed));
+        motorBackRight.setPower(Math.abs(speed));
+        motorFrontLeft.setPower(Math.abs(speed));
+        motorBackLeft.setPower(Math.abs(speed));
+
+
+        while (opModeIsActive() &&
+                (this.runtime.seconds() < timeout) &&
+                (motorFrontRight.isBusy() && motorBackRight.isBusy() && motorFrontLeft.isBusy() && motorBackLeft.isBusy())) {
+
+        }
+
+        motorFrontRight.setPower(0);
+        motorBackRight.setPower(0);
+        motorFrontLeft.setPower(0);
+        motorBackLeft.setPower(0);
+
+        motorFrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
 
 
 }
