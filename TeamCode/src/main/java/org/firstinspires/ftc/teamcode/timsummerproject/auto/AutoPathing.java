@@ -348,17 +348,17 @@ public class AutoPathing extends LinearOpMode {
                 while (distRight.getDistance(DistanceUnit.MM) > 10) {
                     drive.move(1);
                     update();
-                    
+
                 }
             }
         }
-        else if (yPos > 4) {
+        else if (yPos > 3) {
             moveInch(2,-2,0.3f,4);
             moveInch(16, -16, 0.4f,4);
             moveInch(10,1,2);
         }
-        else if (yPos < -4) {
-            moveInch(-1,2,0.3f,4);
+        else if (yPos < -3) {
+            moveInch(-2,2,0.3f,4);
             moveInch(16, -16, 0.4f,4);
             moveInch(10,1,2);
         }
