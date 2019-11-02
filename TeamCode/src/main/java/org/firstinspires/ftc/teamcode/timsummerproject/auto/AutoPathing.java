@@ -91,6 +91,7 @@ public class AutoPathing extends LinearOpMode {
     private OpenGLMatrix lastLocation = null;
     private VuforiaLocalizer vuforia = null;
     public boolean targetVisible = false;
+    private boolean foundStone = false;
     private float phoneXRotate    = 0;
     private float phoneYRotate    = 0;
     private float phoneZRotate    = 0;
@@ -291,7 +292,7 @@ public class AutoPathing extends LinearOpMode {
         setBrake();
 
         // moveInch(-12,0.1f,100);
-        while (!isStopRequested()) {
+        while (!isStopRequested() && !foundStone) {
 
             // check all the trackable targets to see which one (if any) is visible.
             targetVisible = false;
@@ -338,7 +339,7 @@ public class AutoPathing extends LinearOpMode {
             } else if (!targetVisible){
                 drive.move(-0.2f);
             } else if (yPos < 50 && yPos > -50) {
-                break;
+                foundStone = true;
             }
             update();
         }
