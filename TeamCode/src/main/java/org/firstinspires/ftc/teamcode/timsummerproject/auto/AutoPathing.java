@@ -287,12 +287,7 @@ public class AutoPathing extends LinearOpMode {
 
         targetsSkyStone.activate();
 
-        waitForStart();
-
-        setBrake();
-
-        // moveInch(-12,0.1f,100);
-        while (!isStopRequested()) {
+        while (!isStarted()) {
 
             // check all the trackable targets to see which one (if any) is visible.
             targetVisible = false;
@@ -331,25 +326,22 @@ public class AutoPathing extends LinearOpMode {
             }
             telemetry.addData("Y-Position: ",yPos);
             telemetry.update();
-/*
-            if (targetVisible && (yPos > 0)) {
-                drive.move("LEFT", 0.3f);
-            } else if (targetVisible && (yPos < 0)) {
-                drive.move("RIGHT", 0.3f);
-            } else if (!targetVisible){
-                    drive.move(-0.3f);
-            } else if (yPos < 50 && yPos > -50) {
-            }
-            update();
-            if (runtime.seconds() > 4 && targetVisible) {
-                drive.move(0);
-                break;
-            }
-            
- */         break;
+
         }
 
-        moveInch(10,-10,0.3f,4);
+        waitForStart();
+        setBrake();
+        telemetry.addData("yPos: ", yPos);
+        if (yPos > 4) {
+            moveInch(2,-2,0.3f,4);
+        }
+        else if (yPos < -4) {
+            moveInch(-1,2,0.3f,4);
+        }
+
+        moveInch(-12,0.1f,100);
+
+        moveInch(-16,16,0.2f,10);
 
 
 
