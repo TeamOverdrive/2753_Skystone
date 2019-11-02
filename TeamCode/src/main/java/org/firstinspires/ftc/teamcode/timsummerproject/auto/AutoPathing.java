@@ -346,10 +346,10 @@ public class AutoPathing extends LinearOpMode {
                 break;
             }
             
- */
+ */         break;
         }
 
-        turnTo(180,imu);
+        turnTo(90,imu);
 
 
 
@@ -445,7 +445,7 @@ public class AutoPathing extends LinearOpMode {
 
         Orientation angles;
 
-        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.YZX, AngleUnit.DEGREES);
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, XYZ, AngleUnit.DEGREES);
 
         while (!(angle <= angles.firstAngle + 1) && !(angle >= angles.firstAngle - 1)) {
             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.YZX, AngleUnit.DEGREES);
