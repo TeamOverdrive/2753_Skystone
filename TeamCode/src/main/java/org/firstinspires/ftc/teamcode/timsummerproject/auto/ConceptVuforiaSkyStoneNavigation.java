@@ -113,6 +113,10 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
     private float phoneYRotate    = 0;
     private float phoneZRotate    = 0;
 
+    public static double yPos;
+    public static double zPos;
+    public static double xPos;
+
     @Override public void runOpMode() {
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
@@ -330,7 +334,16 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
             telemetry.update();
         }
 
+
         // Disable Tracking when we are done;
         targetsSkyStone.deactivate();
+    }
+    public  void setXYZ() {
+        if (targetVisible) {
+            VectorF translation = lastLocation.getTranslation();
+            xPos = translation.get(0) / mmPerInch;
+            yPos = translation.get(1) / mmPerInch;
+            zPos = translation.get(2) / mmPerInch;
+        }
     }
 }

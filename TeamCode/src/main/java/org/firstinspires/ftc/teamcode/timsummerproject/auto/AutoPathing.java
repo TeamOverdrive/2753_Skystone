@@ -30,10 +30,6 @@ public class AutoPathing extends LinearOpMode {
     DcMotor motorFrontLeft;
     DcMotor motorFrontRight;
 
-    double xPos;
-    double yPos;
-    double zPos;
-
     public void runOpMode() {
 
         BNO055IMU imu;
@@ -61,32 +57,27 @@ public class AutoPathing extends LinearOpMode {
 
         setBrake();
 
-        moveInch(-24,0.1f,100);
+        moveInch(-12,0.1f,100);
+
+
+        while (true) {
+            if (ConceptVuforiaSkyStoneNavigation.yPos < 10) {
+                drive.move("LEFT", 1);
+            } else {
+                drive.move(0);
+            }
+            if (ConceptVuforiaSkyStoneNavigation.yPos > -10) {
+                drive.move("RIGHT", 1);
+            } else {
+                drive.move(0);
+            }
+            if (ConceptVuforiaSkyStoneNavigation.yPos < 10 && ConceptVuforiaSkyStoneNavigation.yPos > -10)
+                break;
+            update();
+            //telemetry.addData("Target?", ConceptVuforiaSkyStoneNavigation.);
+        }
 
         turnTo(90,imu);
-        /*
-        xPos = ConceptVuforiaSkyStoneNavigation.xPosition;
-        yPos = ConceptVuforiaSkyStoneNavigation.yPosition;
-        zPos = ConceptVuforiaSkyStoneNavigation.zPosition;
-
-        if (yPos >60) {
-            drive.move("LEFT",1);
-        }
-        else{
-            drive.move(0);
-        }
-        if (yPos <29) {
-            drive.move("RIGHT",1);
-        }
-        else{
-            drive.move(0);
-        }
-        update();
-
-         */
-
-
-
 
 
 
