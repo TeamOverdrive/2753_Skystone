@@ -290,14 +290,7 @@ public class AutoPathing extends LinearOpMode {
 
         moveInch(-12,0.1f,100);
 
-<<<<<<< Updated upstream
-=======
         turnTo(90,imu);
-        /*
-        xPos = ConceptVuforiaSkyStoneNavigation.xPosition;
-        yPos = ConceptVuforiaSkyStoneNavigation. yPosition;
-        zPos = ConceptVuforiaSkyStoneNavigation.zPosition;
->>>>>>> Stashed changes
 
         targetsSkyStone.activate();
         while (!isStopRequested()) {
