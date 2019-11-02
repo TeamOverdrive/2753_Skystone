@@ -332,12 +332,12 @@ public class AutoPathing extends LinearOpMode {
             telemetry.update();
 
             if (targetVisible && (yPos > 0)) {
-                drive.move("LEFT", 0.1f);
+                drive.move("LEFT", 0.2f);
             } else if (targetVisible && (yPos < 0)) {
-                drive.move("RIGHT", 0.1f);
+                drive.move("RIGHT", 0.2f);
             } else if (!targetVisible){
-                moveInch(-2,0.2f,100);
-            } else if (yPos < 10 && yPos > -10) {
+                drive.move(0.5f);
+            } else if (yPos < 50 && yPos > -50) {
                 break;
             }
             update();
