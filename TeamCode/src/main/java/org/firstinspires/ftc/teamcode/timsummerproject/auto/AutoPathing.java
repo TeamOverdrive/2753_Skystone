@@ -346,7 +346,7 @@ public class AutoPathing extends LinearOpMode {
                 locateSkystone();
             else {
                 while (distRight.getDistance(DistanceUnit.MM) > 10) {
-                    drive.move(1);
+                    drive.move(-1);
                     update();
 
                 }
