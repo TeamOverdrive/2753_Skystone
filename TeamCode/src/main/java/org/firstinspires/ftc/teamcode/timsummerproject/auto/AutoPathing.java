@@ -340,6 +340,7 @@ public class AutoPathing extends LinearOpMode {
             } else if (yPos < 0.1 && yPos > -0.1) {
                 break;
             }
+            update();
         }
 
         turnTo(180,imu);
