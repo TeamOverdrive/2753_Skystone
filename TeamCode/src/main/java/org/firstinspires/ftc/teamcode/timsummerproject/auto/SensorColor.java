@@ -148,7 +148,7 @@ public class SensorColor extends LinearOpMode {
                     .addData("r", "%02x", Color.red(color))
                     .addData("g", "%02x", Color.green(color))
                     .addData("b", "%02x", Color.blue(color));
-            if (Color.red((color)) > 74) {
+            if (Color.red((color)) > 14) {
                 telemetry.addLine("Nope");
             } else {
                 telemetry.addLine("Skystone");
