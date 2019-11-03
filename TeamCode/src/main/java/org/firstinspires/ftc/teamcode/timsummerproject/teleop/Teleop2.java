@@ -68,13 +68,13 @@ public class Teleop2 extends LinearOpMode {
                 setBrake(motorBackRight);
                 stopMove();
             }
-            if (gamepad1.a) {
-                drive.move("RIGHT",1);
-                setBrake(motorFrontLeft);
-            }
+
             if (gamepad2.right_trigger > 0.2)
+            {
                 intakeSpeed = gamepad2.right_trigger * 1.25f;
-            intake.setPower(intakeSpeed);
+                intake.setPower(intakeSpeed);
+            }
+
             drive.BackLeft += gamepad1.left_trigger;
             drive.FrontLeft += gamepad1.left_trigger;
             drive.BackRight += gamepad1.right_trigger;
