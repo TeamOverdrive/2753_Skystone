@@ -148,10 +148,10 @@ public class SensorColor extends LinearOpMode {
                     .addData("r", "%02x", Color.red(color))
                     .addData("g", "%02x", Color.green(color))
                     .addData("b", "%02x", Color.blue(color));
-            if (Color.red((color)) > 170) {
-                telemetry.addLine("Skystone");
-            } else {
+            if (Color.red((color)) > 74) {
                 telemetry.addLine("Nope");
+            } else {
+                telemetry.addLine("Skystone");
             }
 
             // Balance the colors. The values returned by getColors() are normalized relative to the
