@@ -453,7 +453,7 @@ public class AutoPathing extends LinearOpMode {
                 else if (relativeTarget < 0)
                     relativeTarget = Math.PI * 2 - Math.abs(relativeTarget);
             }
-
+            //what is the issue here, it does not want to work on the math.pi nigerian
             motorFrontRight.setPower((relativeTarget/Math.PI) * Math.abs(relativeTarget/Math.PI));
             motorBackRight.setPower((relativeTarget/Math.PI) * Math.abs(relativeTarget/Math.PI));
             motorFrontLeft.setPower(-((relativeTarget/Math.PI) * Math.abs(relativeTarget/Math.PI)));

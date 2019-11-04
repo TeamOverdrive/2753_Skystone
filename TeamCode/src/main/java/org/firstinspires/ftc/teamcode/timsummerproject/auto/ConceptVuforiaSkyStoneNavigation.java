@@ -334,7 +334,7 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
             telemetry.update();
         }
 
-
+ 
         // Disable Tracking when we are done;
         targetsSkyStone.deactivate();
     }
