@@ -14,6 +14,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.timsummerproject.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.timsummerproject.util.nonStaticTelemetry;
 
+import java.util.Locale;
+
 @TeleOp(name = "Teleop2.1", group = "TeleOp")
 public class Teleop2 extends LinearOpMode {
 
@@ -83,6 +85,8 @@ public class Teleop2 extends LinearOpMode {
             removeBrake();
             update();
 
+            //Telemetry
+            telemetry.addData("Heading (Z?)", formatAngle(angles.angleUnit, angles.firstAngle));
         }
 
     }
@@ -139,6 +143,16 @@ public class Teleop2 extends LinearOpMode {
         motorBackLeft.setPower(0);
         motorBackRight.setPower(0);
 
+    }
+
+    String formatAngle(AngleUnit angleUnit, double angle)
+    {
+        return formatDegrees(AngleUnit.DEGREES.fromUnit(angleUnit, angle));
+    }
+
+    String formatDegrees(double degrees)
+    {
+        return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
     }
 
 }
