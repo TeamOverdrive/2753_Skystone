@@ -145,10 +145,12 @@ public class SensorTest extends LinearOpMode {
                     .addData("b", "%02x", Color.blue(color));
             telemetry.update();
             sleep(100);
-            if (Color.red((color)) > 3) {
+            if (Color.red((color)) >= 1) {
                 moveInch(8,0.1f,10);
             } else {
-                stop();
+                telemetry.addLine("YEET");
+                telemetry.update();
+                break;
             }
         }
     }
