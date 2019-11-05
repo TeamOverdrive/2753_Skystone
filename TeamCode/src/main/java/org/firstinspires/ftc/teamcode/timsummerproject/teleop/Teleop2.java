@@ -51,7 +51,7 @@ public class Teleop2 extends LinearOpMode {
         while (opModeIsActive()) {
 
             initMotors();
-            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.YZX, AngleUnit.DEGREES);
+            angles = imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.YZX, AngleUnit.DEGREES);
             teleDrive(angles);
             if (gamepad1.left_bumper) {
                 setBrake(motorFrontLeft);
