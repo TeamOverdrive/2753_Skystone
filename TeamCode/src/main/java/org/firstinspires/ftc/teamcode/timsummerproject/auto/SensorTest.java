@@ -150,7 +150,8 @@ public class SensorTest extends LinearOpMode {
             } else {
                 telemetry.addLine("YEET");
                 telemetry.update();
-                break;
+                drive.move(0);
+                update(); 
             }
         }
     }
