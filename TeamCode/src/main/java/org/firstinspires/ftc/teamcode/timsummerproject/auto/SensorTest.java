@@ -45,6 +45,7 @@ public class SensorTest extends LinearOpMode {
     DriveTrain drive = new DriveTrain();
 
     private ElapsedTime runtime = new ElapsedTime();
+    private ElapsedTime waittime = new ElapsedTime();
 
     private DistanceSensor distRight;
     private DistanceSensor distLeft;
@@ -61,6 +62,9 @@ public class SensorTest extends LinearOpMode {
     View relativeLayout;
 
     public void runOpMode() throws InterruptedException {
+
+        initMotors();
+        initIMU();
 
         int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
@@ -140,6 +144,7 @@ public class SensorTest extends LinearOpMode {
                     .addData("g", "%02x", Color.green(color))
                     .addData("b", "%02x", Color.blue(color));
             telemetry.update();
+            sleep(100);
             if (Color.red((color)) > 14) {
                 moveInch(8,0.1f,10);
             } else {
