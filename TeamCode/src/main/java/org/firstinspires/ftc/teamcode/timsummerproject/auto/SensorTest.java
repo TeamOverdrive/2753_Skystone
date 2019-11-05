@@ -1,11 +1,18 @@
 package org.firstinspires.ftc.teamcode.timsummerproject.auto;
 
+import android.app.Activity;
+import android.graphics.Color;
+import android.view.View;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+import com.qualcomm.robotcore.hardware.SwitchableLight;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -47,12 +54,97 @@ public class SensorTest extends LinearOpMode {
     DcMotor motorFrontLeft;
     DcMotor motorFrontRight;
 
+    NormalizedColorSensor colorSensor;
+    /** The relativeLayout field is used to aid in providing interesting visual feedback
+     * in this sample application; you probably *don't* need something analogous when you
+     * use a color sensor on your robot */
+    View relativeLayout;
+
     public void runOpMode() throws InterruptedException {
 
+        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+        relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+
+        float[] hsvValues = new float[3];
+        final float values[] = hsvValues;
+
+        // bPrevState and bCurrState keep track of the previous and current state of the button
+        boolean bPrevState = false;
+        boolean bCurrState = false;
+
+        // Get a reference to our sensor object.
+        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
+
+        // If possible, turn the light on in the beginning (it might already be on anyway,
+        // we just make sure it is if we can).
+        if (colorSensor instanceof SwitchableLight) {
+            ((SwitchableLight)colorSensor).enableLight(true);
+        }
+
+        // Wait for the start button to be pressed.
         waitForStart();
 
-        while(opModeIsActive()) {
-            
+        while (true) {
+
+            NormalizedRGBA colors = colorSensor.getNormalizedColors();
+
+            /** Use telemetry to display feedback on the driver station. We show the conversion
+             * of the colors to hue, saturation and value, and display the the normalized values
+             * as returned from the sensor.
+             * @see <a href="http://infohost.nmt.edu/tcc/help/pubs/colortheory/web/hsv.html">HSV</a>*/
+
+            Color.colorToHSV(colors.toColor(), hsvValues);
+            telemetry.addLine()
+                    .addData("H", "%.3f", hsvValues[0])
+                    .addData("S", "%.3f", hsvValues[1])
+                    .addData("V", "%.3f", hsvValues[2]);
+            telemetry.addLine()
+                    .addData("a", "%.3f", colors.alpha)
+                    .addData("r", "%.3f", colors.red)
+                    .addData("g", "%.3f", colors.green)
+                    .addData("b", "%.3f", colors.blue);
+
+            /** We also display a conversion of the colors to an equivalent Android color integer.
+             * @see Color */
+            int color = colors.toColor();
+            telemetry.addLine("raw Android color: ")
+                    .addData("a", "%02x", Color.alpha(color))
+                    .addData("r", "%02x", Color.red(color))
+                    .addData("g", "%02x", Color.green(color))
+                    .addData("b", "%02x", Color.blue(color));
+            if (Color.red((color)) > 14) {
+                telemetry.addLine("Nope");
+            } else {
+                telemetry.addLine("Skystone");
+            }
+
+            // Balance the colors. The values returned by getColors() are normalized relative to the
+            // maximum possible values that the sensor can measure. For example, a sensor might in a
+            // particular configuration be able to internally measure color intensity in a range of
+            // [0, 10240]. In such a case, the values returned by getColors() will be divided by 10240
+            // so as to return a value it the range [0,1]. However, and this is the point, even so, the
+            // values we see here may not get close to 1.0 in, e.g., low light conditions where the
+            // sensor measurements don't approach their maximum limit. In such situations, the *relative*
+            // intensities of the colors are likely what is most interesting. Here, for example, we boost
+            // the signal on the colors while maintaining their relative balance so as to give more
+            // vibrant visual feedback on the robot controller visual display.
+            float max = Math.max(Math.max(Math.max(colors.red, colors.green), colors.blue), colors.alpha);
+            colors.red   /= max;
+            colors.green /= max;
+            colors.blue  /= max;
+            color = colors.toColor();
+
+            telemetry.addLine("normalized color:  ")
+                    .addData("a", "%02x", Color.alpha(color))
+                    .addData("r", "%02x", Color.red(color))
+                    .addData("g", "%02x", Color.green(color))
+                    .addData("b", "%02x", Color.blue(color));
+            telemetry.update();
+            if (Color.red((color)) > 14) {
+                moveInch(8,0.1f,10);
+            } else {
+                stop();
+            }
         }
     }
 
